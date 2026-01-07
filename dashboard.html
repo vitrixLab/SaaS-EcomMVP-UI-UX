@@ -1,0 +1,1885 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="system">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>ProductSaaS Pro | Microservices E-commerce Dashboard</title>
+  
+  <!-- Favicon -->
+  <link rel="icon" type="image/png" href="https://cdn-icons-png.flaticon.com/512/3144/3144456.png">
+  
+  <!-- Inter Font -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  
+  <style>
+    /* ===== CSS CUSTOM PROPERTIES ===== */
+    :root {
+      /* Color System - Semantic Tokens */
+      --color-primary-50: #eff6ff;
+      --color-primary-100: #dbeafe;
+      --color-primary-500: #3b82f6;
+      --color-primary-600: #2563eb;
+      --color-primary-700: #1d4ed8;
+      
+      --color-success-50: #f0fdf4;
+      --color-success-500: #10b981;
+      --color-success-600: #059669;
+      
+      --color-warning-50: #fffbeb;
+      --color-warning-500: #f59e0b;
+      --color-warning-600: #d97706;
+      
+      --color-error-50: #fef2f2;
+      --color-error-500: #ef4444;
+      --color-error-600: #dc2626;
+      
+      --color-neutral-50: #f9fafb;
+      --color-neutral-100: #f3f4f6;
+      --color-neutral-200: #e5e7eb;
+      --color-neutral-300: #d1d5db;
+      --color-neutral-400: #9ca3af;
+      --color-neutral-500: #6b7280;
+      --color-neutral-600: #4b5563;
+      --color-neutral-700: #374151;
+      --color-neutral-800: #1f2937;
+      --color-neutral-900: #111827;
+      
+      /* Semantic Colors - Light Theme */
+      --color-bg-primary: var(--color-neutral-50);
+      --color-bg-secondary: white;
+      --color-bg-tertiary: var(--color-neutral-100);
+      --color-bg-overlay: rgba(0, 0, 0, 0.5);
+      
+      --color-text-primary: var(--color-neutral-900);
+      --color-text-secondary: var(--color-neutral-600);
+      --color-text-tertiary: var(--color-neutral-500);
+      --color-text-disabled: var(--color-neutral-400);
+      
+      --color-border: var(--color-neutral-200);
+      --color-border-hover: var(--color-neutral-300);
+      
+      --color-shadow: rgba(0, 0, 0, 0.08);
+      --color-shadow-lg: rgba(0, 0, 0, 0.12);
+      
+      /* Spacing Scale */
+      --space-1: 4px;
+      --space-2: 8px;
+      --space-3: 12px;
+      --space-4: 16px;
+      --space-5: 20px;
+      --space-6: 24px;
+      --space-8: 32px;
+      --space-10: 40px;
+      --space-12: 48px;
+      
+      /* Typography Scale */
+      --text-xs: 12px;
+      --text-sm: 14px;
+      --text-base: 16px;
+      --text-lg: 18px;
+      --text-xl: 20px;
+      --text-2xl: 24px;
+      --text-3xl: 30px;
+      --text-4xl: 36px;
+      
+      /* Border Radius */
+      --radius-sm: 4px;
+      --radius-md: 8px;
+      --radius-lg: 12px;
+      --radius-xl: 16px;
+      --radius-full: 9999px;
+      
+      /* Transitions */
+      --transition-fast: 150ms ease;
+      --transition-base: 250ms ease;
+      --transition-slow: 350ms ease;
+      
+      /* Z-index Layers */
+      --z-dropdown: 10;
+      --z-sticky: 20;
+      --z-modal: 30;
+      --z-popover: 40;
+      --z-toast: 50;
+    }
+
+    /* Dark Theme Overrides */
+    [data-theme="dark"] {
+      --color-bg-primary: var(--color-neutral-900);
+      --color-bg-secondary: var(--color-neutral-800);
+      --color-bg-tertiary: var(--color-neutral-700);
+      --color-bg-overlay: rgba(0, 0, 0, 0.75);
+      
+      --color-text-primary: white;
+      --color-text-secondary: var(--color-neutral-300);
+      --color-text-tertiary: var(--color-neutral-400);
+      --color-text-disabled: var(--color-neutral-500);
+      
+      --color-border: var(--color-neutral-700);
+      --color-border-hover: var(--color-neutral-600);
+      
+      --color-shadow: rgba(0, 0, 0, 0.25);
+      --color-shadow-lg: rgba(0, 0, 0, 0.35);
+    }
+
+    /* ===== BASE RESET & TYPOGRAPHY ===== */
+    * {
+      margin: 0;
+      padding: 0;
+      box-sizing: border-box;
+    }
+
+    html {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+      font-size: 16px;
+      line-height: 1.5;
+      -webkit-font-smoothing: antialiased;
+      -moz-osx-font-smoothing: grayscale;
+    }
+
+    body {
+      background-color: var(--color-bg-primary);
+      color: var(--color-text-primary);
+      transition: background-color var(--transition-base);
+      min-height: 100vh;
+      overflow-x: hidden;
+    }
+
+    /* ===== ACCESSIBILITY UTILITIES ===== */
+    .sr-only {
+      position: absolute;
+      width: 1px;
+      height: 1px;
+      padding: 0;
+      margin: -1px;
+      overflow: hidden;
+      clip: rect(0, 0, 0, 0);
+      white-space: nowrap;
+      border: 0;
+    }
+
+    .focus-visible {
+      outline: 2px solid var(--color-primary-500);
+      outline-offset: 2px;
+    }
+
+    .focus-visible:not(:focus-visible) {
+      outline: none;
+    }
+
+    /* ===== LAYOUT SYSTEM ===== */
+    .container {
+      width: 100%;
+      max-width: 1440px;
+      margin: 0 auto;
+      padding: 0 var(--space-4);
+    }
+
+    /* ===== SKELETON LOADING ===== */
+    .skeleton {
+      background: linear-gradient(
+        90deg,
+        var(--color-bg-tertiary) 0%,
+        var(--color-border) 50%,
+        var(--color-bg-tertiary) 100%
+      );
+      background-size: 200% 100%;
+      animation: shimmer 1.5s infinite;
+      border-radius: var(--radius-md);
+      opacity: 0.7;
+    }
+
+    @keyframes shimmer {
+      0% {
+        background-position: -200% 0;
+      }
+      100% {
+        background-position: 200% 0;
+      }
+    }
+
+    /* ===== THEME SWITCHER ===== */
+    .theme-switcher {
+      position: fixed;
+      top: var(--space-4);
+      right: var(--space-4);
+      z-index: var(--z-sticky);
+      background: var(--color-bg-secondary);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-full);
+      padding: var(--space-2);
+      display: flex;
+      gap: var(--space-1);
+      box-shadow: 0 4px 12px var(--color-shadow);
+      backdrop-filter: blur(8px);
+    }
+
+    .theme-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-full);
+      border: none;
+      background: transparent;
+      color: var(--color-text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .theme-btn:hover {
+      background: var(--color-bg-tertiary);
+      color: var(--color-text-primary);
+    }
+
+    .theme-btn.active {
+      background: var(--color-primary-500);
+      color: white;
+    }
+
+    /* ===== SIDEBAR NAVIGATION ===== */
+    .sidebar {
+      position: fixed;
+      top: 0;
+      left: 0;
+      bottom: 0;
+      width: 240px;
+      background: var(--color-bg-secondary);
+      border-right: 1px solid var(--color-border);
+      padding: var(--space-6) var(--space-4);
+      display: flex;
+      flex-direction: column;
+      z-index: var(--z-sticky);
+      transform: translateX(-100%);
+      transition: transform var(--transition-base);
+    }
+
+    .sidebar.open {
+      transform: translateX(0);
+    }
+
+    @media (min-width: 1024px) {
+      .sidebar {
+        transform: translateX(0);
+      }
+    }
+
+    .logo {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      margin-bottom: var(--space-8);
+      padding: 0 var(--space-2);
+    }
+
+    .logo-icon {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-md);
+      background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-700));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      color: white;
+      font-weight: 600;
+    }
+
+    .logo-text {
+      font-size: var(--text-lg);
+      font-weight: 700;
+      color: var(--color-text-primary);
+    }
+
+    .nav-section {
+      margin-bottom: var(--space-6);
+    }
+
+    .nav-section-title {
+      font-size: var(--text-xs);
+      font-weight: 600;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      color: var(--color-text-tertiary);
+      margin-bottom: var(--space-3);
+      padding: 0 var(--space-2);
+    }
+
+    .nav-list {
+      list-style: none;
+    }
+
+    .nav-item {
+      margin-bottom: var(--space-1);
+    }
+
+    .nav-link {
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      padding: var(--space-3) var(--space-2);
+      border-radius: var(--radius-md);
+      text-decoration: none;
+      color: var(--color-text-secondary);
+      transition: all var(--transition-fast);
+      position: relative;
+    }
+
+    .nav-link:hover {
+      background: var(--color-bg-tertiary);
+      color: var(--color-text-primary);
+    }
+
+    .nav-link.active {
+      background: var(--color-primary-50);
+      color: var(--color-primary-600);
+      font-weight: 500;
+    }
+
+    [data-theme="dark"] .nav-link.active {
+      background: rgba(59, 130, 246, 0.15);
+    }
+
+    .nav-link.active::before {
+      content: '';
+      position: absolute;
+      left: 0;
+      top: 50%;
+      transform: translateY(-50%);
+      width: 3px;
+      height: 60%;
+      background: var(--color-primary-500);
+      border-radius: var(--radius-full);
+    }
+
+    .nav-icon {
+      width: 20px;
+      height: 20px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .nav-badge {
+      margin-left: auto;
+      padding: 2px 6px;
+      background: var(--color-error-50);
+      color: var(--color-error-600);
+      border-radius: var(--radius-full);
+      font-size: var(--text-xs);
+      font-weight: 500;
+    }
+
+    [data-theme="dark"] .nav-badge {
+      background: rgba(239, 68, 68, 0.15);
+    }
+
+    /* ===== MAIN CONTENT AREA ===== */
+    .main-content {
+      min-height: 100vh;
+      transition: margin-left var(--transition-base);
+    }
+
+    @media (min-width: 1024px) {
+      .main-content {
+        margin-left: 240px;
+      }
+    }
+
+    .top-bar {
+      position: sticky;
+      top: 0;
+      z-index: var(--z-sticky);
+      background: var(--color-bg-secondary);
+      border-bottom: 1px solid var(--color-border);
+      padding: var(--space-4);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(8px);
+    }
+
+    .mobile-menu-btn {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      width: 40px;
+      height: 40px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-border);
+      background: var(--color-bg-secondary);
+      color: var(--color-text-secondary);
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .mobile-menu-btn:hover {
+      border-color: var(--color-border-hover);
+      color: var(--color-text-primary);
+    }
+
+    @media (min-width: 1024px) {
+      .mobile-menu-btn {
+        display: none;
+      }
+    }
+
+    .page-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-6);
+    }
+
+    .page-title-section h1 {
+      font-size: var(--text-3xl);
+      font-weight: 700;
+      margin-bottom: var(--space-2);
+    }
+
+    .page-title-section p {
+      color: var(--color-text-secondary);
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: var(--space-3);
+    }
+
+    /* ===== BUTTON SYSTEM ===== */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: var(--space-2);
+      padding: var(--space-3) var(--space-4);
+      border-radius: var(--radius-md);
+      border: 1px solid transparent;
+      font-family: inherit;
+      font-size: var(--text-sm);
+      font-weight: 500;
+      line-height: 1;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      user-select: none;
+      outline: none;
+    }
+
+    .btn:focus-visible {
+      outline: 2px solid var(--color-primary-500);
+      outline-offset: 2px;
+    }
+
+    .btn-primary {
+      background: var(--color-primary-500);
+      color: white;
+    }
+
+    .btn-primary:hover {
+      background: var(--color-primary-600);
+      transform: translateY(-1px);
+      box-shadow: 0 4px 12px var(--color-shadow);
+    }
+
+    .btn-secondary {
+      background: var(--color-bg-tertiary);
+      color: var(--color-text-primary);
+      border-color: var(--color-border);
+    }
+
+    .btn-secondary:hover {
+      background: var(--color-bg-secondary);
+      border-color: var(--color-border-hover);
+    }
+
+    .btn-icon {
+      width: 40px;
+      height: 40px;
+      padding: 0;
+    }
+
+    /* ===== CONTENT CONTAINER ===== */
+    .content-container {
+      padding: var(--space-6);
+    }
+
+    /* ===== KPI METRICS GRID ===== */
+    .kpi-grid {
+      display: grid;
+      grid-template-columns: repeat(1, 1fr);
+      gap: var(--space-4);
+      margin-bottom: var(--space-8);
+    }
+
+    @media (min-width: 640px) {
+      .kpi-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+
+    @media (min-width: 1024px) {
+      .kpi-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+
+    .kpi-card {
+      background: var(--color-bg-secondary);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+      transition: all var(--transition-base);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .kpi-card:hover {
+      border-color: var(--color-border-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px var(--color-shadow);
+    }
+
+    .kpi-card.skeleton {
+      height: 140px;
+    }
+
+    .kpi-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-4);
+    }
+
+    .kpi-title {
+      font-size: var(--text-sm);
+      font-weight: 500;
+      color: var(--color-text-secondary);
+    }
+
+    .kpi-value {
+      font-size: var(--text-3xl);
+      font-weight: 700;
+      margin-bottom: var(--space-2);
+    }
+
+    .kpi-trend {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      padding: var(--space-1) var(--space-2);
+      border-radius: var(--radius-full);
+      font-size: var(--text-xs);
+      font-weight: 500;
+    }
+
+    .trend-up {
+      background: var(--color-success-50);
+      color: var(--color-success-600);
+    }
+
+    .trend-down {
+      background: var(--color-error-50);
+      color: var(--color-error-600);
+    }
+
+    .trend-neutral {
+      background: var(--color-warning-50);
+      color: var(--color-warning-600);
+    }
+
+    .kpi-subtext {
+      font-size: var(--text-sm);
+      color: var(--color-text-tertiary);
+      margin-top: var(--space-2);
+    }
+
+    .kpi-status {
+      position: absolute;
+      top: var(--space-6);
+      right: var(--space-6);
+      width: 8px;
+      height: 8px;
+      border-radius: var(--radius-full);
+    }
+
+    .status-healthy {
+      background: var(--color-success-500);
+      box-shadow: 0 0 0 4px var(--color-success-50);
+    }
+
+    .status-warning {
+      background: var(--color-warning-500);
+      box-shadow: 0 0 0 4px var(--color-warning-50);
+    }
+
+    .status-error {
+      background: var(--color-error-500);
+      box-shadow: 0 0 0 4px var(--color-error-50);
+    }
+
+    /* ===== DATA VISUALIZATION CARDS ===== */
+    .viz-grid {
+      display: grid;
+      grid-template-columns: 1fr;
+      gap: var(--space-6);
+      margin-bottom: var(--space-8);
+    }
+
+    @media (min-width: 1024px) {
+      .viz-grid {
+        grid-template-columns: 2fr 1fr;
+      }
+    }
+
+    .viz-card {
+      background: var(--color-bg-secondary);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-6);
+    }
+
+    .viz-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: var(--space-6);
+    }
+
+    .viz-title {
+      font-size: var(--text-lg);
+      font-weight: 600;
+    }
+
+    .viz-actions {
+      display: flex;
+      gap: var(--space-2);
+    }
+
+    /* ===== PRODUCTS TABLE ===== */
+    .table-container {
+      overflow-x: auto;
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      background: var(--color-bg-secondary);
+    }
+
+    .products-table {
+      width: 100%;
+      border-collapse: collapse;
+      min-width: 800px;
+    }
+
+    .products-table th {
+      background: var(--color-bg-tertiary);
+      padding: var(--space-4);
+      text-align: left;
+      font-size: var(--text-sm);
+      font-weight: 600;
+      color: var(--color-text-secondary);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .products-table td {
+      padding: var(--space-4);
+      border-bottom: 1px solid var(--color-border);
+    }
+
+    .products-table tr:last-child td {
+      border-bottom: none;
+    }
+
+    .products-table tr:hover {
+      background: var(--color-bg-tertiary);
+    }
+
+    .product-type {
+      display: inline-flex;
+      align-items: center;
+      gap: var(--space-1);
+      padding: var(--space-1) var(--space-3);
+      border-radius: var(--radius-full);
+      font-size: var(--text-xs);
+      font-weight: 500;
+    }
+
+    .type-physical {
+      background: var(--color-primary-50);
+      color: var(--color-primary-600);
+    }
+
+    .type-digital {
+      background: var(--color-success-50);
+      color: var(--color-success-600);
+    }
+
+    .type-service {
+      background: var(--color-warning-50);
+      color: var(--color-warning-600);
+    }
+
+    .table-actions {
+      display: flex;
+      gap: var(--space-2);
+    }
+
+    .action-btn {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-border);
+      background: var(--color-bg-secondary);
+      color: var(--color-text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .action-btn:hover {
+      background: var(--color-bg-tertiary);
+      color: var(--color-text-primary);
+    }
+
+    .action-btn.delete:hover {
+      border-color: var(--color-error-500);
+      color: var(--color-error-500);
+    }
+
+    /* ===== EMPTY STATES ===== */
+    .empty-state {
+      padding: var(--space-12) var(--space-6);
+      text-align: center;
+      color: var(--color-text-tertiary);
+    }
+
+    .empty-icon {
+      font-size: 48px;
+      margin-bottom: var(--space-4);
+      opacity: 0.5;
+    }
+
+    .empty-title {
+      font-size: var(--text-lg);
+      font-weight: 600;
+      margin-bottom: var(--space-2);
+      color: var(--color-text-secondary);
+    }
+
+    .empty-description {
+      max-width: 400px;
+      margin: 0 auto var(--space-6);
+    }
+
+    /* ===== MODAL SYSTEM ===== */
+    .modal-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--color-bg-overlay);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: var(--z-modal);
+      opacity: 0;
+      visibility: hidden;
+      transition: all var(--transition-base);
+      backdrop-filter: blur(4px);
+    }
+
+    .modal-overlay.open {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .modal {
+      background: var(--color-bg-secondary);
+      border-radius: var(--radius-xl);
+      width: 90%;
+      max-width: 500px;
+      max-height: 90vh;
+      overflow-y: auto;
+      transform: translateY(20px);
+      transition: transform var(--transition-base);
+      box-shadow: 0 20px 40px var(--color-shadow-lg);
+    }
+
+    .modal-overlay.open .modal {
+      transform: translateY(0);
+    }
+
+    .modal-header {
+      padding: var(--space-6) var(--space-6) var(--space-4);
+      border-bottom: 1px solid var(--color-border);
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .modal-title {
+      font-size: var(--text-xl);
+      font-weight: 600;
+    }
+
+    .modal-close {
+      width: 32px;
+      height: 32px;
+      border-radius: var(--radius-md);
+      border: none;
+      background: var(--color-bg-tertiary);
+      color: var(--color-text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+    }
+
+    .modal-close:hover {
+      background: var(--color-bg-primary);
+      color: var(--color-text-primary);
+    }
+
+    .modal-body {
+      padding: var(--space-6);
+    }
+
+    /* ===== FORM SYSTEM ===== */
+    .form-group {
+      margin-bottom: var(--space-4);
+    }
+
+    .form-label {
+      display: block;
+      margin-bottom: var(--space-2);
+      font-size: var(--text-sm);
+      font-weight: 500;
+      color: var(--color-text-secondary);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: var(--space-3) var(--space-4);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-md);
+      background: var(--color-bg-secondary);
+      color: var(--color-text-primary);
+      font-family: inherit;
+      font-size: var(--text-base);
+      transition: all var(--transition-fast);
+    }
+
+    .form-control:focus {
+      outline: none;
+      border-color: var(--color-primary-500);
+      box-shadow: 0 0 0 3px var(--color-primary-50);
+    }
+
+    [data-theme="dark"] .form-control:focus {
+      box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.2);
+    }
+
+    .form-control::placeholder {
+      color: var(--color-text-tertiary);
+    }
+
+    .form-actions {
+      display: flex;
+      gap: var(--space-3);
+      margin-top: var(--space-6);
+    }
+
+    /* ===== TOAST NOTIFICATIONS ===== */
+    .toast-container {
+      position: fixed;
+      bottom: var(--space-4);
+      right: var(--space-4);
+      z-index: var(--z-toast);
+      display: flex;
+      flex-direction: column;
+      gap: var(--space-2);
+    }
+
+    .toast {
+      background: var(--color-bg-secondary);
+      border: 1px solid var(--color-border);
+      border-radius: var(--radius-lg);
+      padding: var(--space-4);
+      display: flex;
+      align-items: center;
+      gap: var(--space-3);
+      min-width: 300px;
+      box-shadow: 0 8px 24px var(--color-shadow);
+      animation: slideInRight var(--transition-base);
+    }
+
+    .toast-icon {
+      width: 24px;
+      height: 24px;
+      border-radius: var(--radius-full);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: var(--text-sm);
+    }
+
+    .toast-success {
+      border-left: 4px solid var(--color-success-500);
+    }
+
+    .toast-success .toast-icon {
+      background: var(--color-success-50);
+      color: var(--color-success-500);
+    }
+
+    .toast-error {
+      border-left: 4px solid var(--color-error-500);
+    }
+
+    .toast-error .toast-icon {
+      background: var(--color-error-50);
+      color: var(--color-error-500);
+    }
+
+    @keyframes slideInRight {
+      from {
+        transform: translateX(100%);
+        opacity: 0;
+      }
+      to {
+        transform: translateX(0);
+        opacity: 1;
+      }
+    }
+
+    /* ===== LOADING OVERLAY ===== */
+    .loading-overlay {
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: var(--color-bg-overlay);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      z-index: var(--z-modal);
+      opacity: 0;
+      visibility: hidden;
+      transition: all var(--transition-base);
+    }
+
+    .loading-overlay.active {
+      opacity: 1;
+      visibility: visible;
+    }
+
+    .loading-spinner {
+      width: 48px;
+      height: 48px;
+      border: 3px solid var(--color-bg-tertiary);
+      border-top-color: var(--color-primary-500);
+      border-radius: var(--radius-full);
+      animation: spin 1s linear infinite;
+      margin-bottom: var(--space-4);
+    }
+
+    @keyframes spin {
+      to {
+        transform: rotate(360deg);
+      }
+    }
+
+    /* ===== RESPONSIVE ADJUSTMENTS ===== */
+    @media (max-width: 640px) {
+      .content-container {
+        padding: var(--space-4);
+      }
+      
+      .page-header {
+        flex-direction: column;
+        align-items: stretch;
+        gap: var(--space-4);
+      }
+      
+      .action-buttons {
+        justify-content: space-between;
+      }
+    }
+  </style>
+</head>
+<body>
+  <!-- Theme Switcher -->
+  <div class="theme-switcher">
+    <button class="theme-btn active" data-theme="system" aria-label="Use system theme">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <rect x="2" y="3" width="20" height="14" rx="2" ry="2"></rect>
+        <line x1="8" y1="21" x2="16" y2="21"></line>
+        <line x1="12" y1="17" x2="12" y2="21"></line>
+      </svg>
+    </button>
+    <button class="theme-btn" data-theme="light" aria-label="Use light theme">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <circle cx="12" cy="12" r="5"></circle>
+        <line x1="12" y1="1" x2="12" y2="3"></line>
+        <line x1="12" y1="21" x2="12" y2="23"></line>
+        <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+        <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+        <line x1="1" y1="12" x2="3" y2="12"></line>
+        <line x1="21" y1="12" x2="23" y2="12"></line>
+        <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+        <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+      </svg>
+    </button>
+    <button class="theme-btn" data-theme="dark" aria-label="Use dark theme">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+      </svg>
+    </button>
+  </div>
+
+  <!-- Sidebar Navigation -->
+  <nav class="sidebar" id="sidebar">
+    <div class="logo">
+      <div class="logo-icon">PS</div>
+      <div class="logo-text">ProductSaaS</div>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">Analytics</div>
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a href="#dashboard" class="nav-link active">
+            <span class="nav-icon">📊</span>
+            <span class="nav-label">Dashboard</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#products" class="nav-link">
+            <span class="nav-icon">📦</span>
+            <span class="nav-label">Products</span>
+            <span class="nav-badge" id="products-count">0</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#performance" class="nav-link">
+            <span class="nav-icon">⚡</span>
+            <span class="nav-label">Performance</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+
+    <div class="nav-section">
+      <div class="nav-section-title">Management</div>
+      <ul class="nav-list">
+        <li class="nav-item">
+          <a href="#api" class="nav-link">
+            <span class="nav-icon">🔧</span>
+            <span class="nav-label">API Management</span>
+          </a>
+        </li>
+        <li class="nav-item">
+          <a href="#settings" class="nav-link">
+            <span class="nav-icon">⚙️</span>
+            <span class="nav-label">Settings</span>
+          </a>
+        </li>
+      </ul>
+    </div>
+  </nav>
+
+  <!-- Main Content -->
+  <main class="main-content" id="mainContent">
+    <!-- Top Bar -->
+    <div class="top-bar">
+      <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Toggle menu">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+          <line x1="3" y1="12" x2="21" y2="12"></line>
+          <line x1="3" y1="6" x2="21" y2="6"></line>
+          <line x1="3" y1="18" x2="21" y2="18"></line>
+        </svg>
+      </button>
+      <div></div> <!-- Spacer -->
+    </div>
+
+    <!-- Content Area -->
+    <div class="content-container">
+      <!-- Page Header -->
+      <div class="page-header">
+        <div class="page-title-section">
+          <h1>Dashboard Overview</h1>
+          <p>Monitor your microservices architecture in real-time</p>
+        </div>
+        <div class="action-buttons">
+          <button class="btn btn-secondary" id="refreshBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M23 4v6h-6"></path>
+              <path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"></path>
+            </svg>
+            Refresh
+          </button>
+          <button class="btn btn-primary" id="createProductBtn">
+            <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <line x1="12" y1="5" x2="12" y2="19"></line>
+              <line x1="5" y1="12" x2="19" y2="12"></line>
+            </svg>
+            New Product
+          </button>
+        </div>
+      </div>
+
+      <!-- KPI Metrics Grid -->
+      <div class="kpi-grid" id="kpiGrid">
+        <!-- KPI cards will be populated by JavaScript -->
+      </div>
+
+      <!-- Products Table -->
+      <div class="viz-card">
+        <div class="viz-header">
+          <div class="viz-title">Recent Products</div>
+          <div class="viz-actions">
+            <button class="btn btn-icon btn-secondary" id="exportBtn" aria-label="Export data">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"></path>
+                <polyline points="7 10 12 15 17 10"></polyline>
+                <line x1="12" y1="15" x2="12" y2="3"></line>
+              </svg>
+            </button>
+            <button class="btn btn-icon btn-secondary" id="filterBtn" aria-label="Filter products">
+              <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <polygon points="22 3 2 3 10 12.46 10 19 14 21 14 12.46 22 3"></polygon>
+              </svg>
+            </button>
+          </div>
+        </div>
+        
+        <div class="table-container">
+          <table class="products-table" id="productsTable">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Type</th>
+                <th>Created</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody id="productsTableBody">
+              <!-- Products will be populated by JavaScript -->
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </main>
+
+  <!-- Create Product Modal -->
+  <div class="modal-overlay" id="createProductModal">
+    <div class="modal">
+      <div class="modal-header">
+        <h2 class="modal-title">Create New Product</h2>
+        <button class="modal-close" id="closeModalBtn" aria-label="Close modal">×</button>
+      </div>
+      <div class="modal-body">
+        <form id="productForm">
+          <div class="form-group">
+            <label class="form-label" for="productName">Product Name</label>
+            <input 
+              type="text" 
+              id="productName" 
+              class="form-control" 
+              placeholder="Enter product name"
+              required
+              autocomplete="off"
+            >
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="productType">Product Type</label>
+            <select id="productType" class="form-control" required>
+              <option value="">Select type</option>
+              <option value="physical">Physical Product</option>
+              <option value="digital">Digital Product</option>
+              <option value="service">Service</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label class="form-label" for="productMetadata">
+              Metadata (Optional)
+              <span style="color: var(--color-text-tertiary); font-weight: normal;"> - JSON format</span>
+            </label>
+            <textarea 
+              id="productMetadata" 
+              class="form-control" 
+              rows="3"
+              placeholder='{"category": "electronics", "price": 99.99}'
+              aria-describedby="metadataHelp"
+            ></textarea>
+            <small id="metadataHelp" style="display: block; margin-top: var(--space-1); color: var(--color-text-tertiary);">
+              Add additional product details in JSON format
+            </small>
+          </div>
+          <div class="form-actions">
+            <button type="button" class="btn btn-secondary" id="cancelBtn">Cancel</button>
+            <button type="submit" class="btn btn-primary" id="submitBtn">Create Product</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+
+  <!-- Toast Container -->
+  <div class="toast-container" id="toastContainer"></div>
+
+  <!-- Loading Overlay -->
+  <div class="loading-overlay" id="loadingOverlay">
+    <div class="loading-spinner"></div>
+    <p>Loading...</p>
+  </div>
+
+  <script>
+    // ===== CONFIGURATION =====
+    const CONFIG = {
+      endpoints: {
+        products: 'https://saas-ecommvp-v1-api-products-service.onrender.com/products',
+        productsService: 'https://saas-ecommvp-v1-api-products-service.onrender.com',
+        databaseService: 'https://vitrixlabph.pythonanywhere.com'
+      },
+      refreshInterval: 30000, // 30 seconds
+      skeletonDelay: 800 // ms
+    };
+
+    // ===== STATE MANAGEMENT =====
+    const state = {
+      theme: 'system',
+      products: [],
+      isLoading: false,
+      currentView: 'dashboard',
+      serviceHealth: {
+        productsService: 'unknown',
+        databaseService: 'unknown'
+      }
+    };
+
+    // ===== UTILITY FUNCTIONS =====
+    const utils = {
+      // DOM helpers
+      $(selector) {
+        return document.querySelector(selector);
+      },
+      $$(selector) {
+        return document.querySelectorAll(selector);
+      },
+      
+      // Async fetch with error handling
+      async fetchJSON(url, options = {}) {
+        try {
+          this.showLoading();
+          const response = await fetch(url, {
+            ...options,
+            headers: {
+              'Content-Type': 'application/json',
+              ...options.headers
+            }
+          });
+          
+          if (!response.ok) {
+            throw new Error(`HTTP ${response.status}`);
+          }
+          
+          return await response.json();
+        } catch (error) {
+          console.error('Fetch error:', error);
+          this.showToast(`Failed to connect to service: ${error.message}`, 'error');
+          throw error;
+        } finally {
+          this.hideLoading();
+        }
+      },
+      
+      // Toast notifications
+      showToast(message, type = 'info') {
+        const container = this.$('#toastContainer');
+        const toast = document.createElement('div');
+        toast.className = `toast toast-${type}`;
+        toast.innerHTML = `
+          <div class="toast-icon">${type === 'success' ? '✓' : '!'}</div>
+          <div>${message}</div>
+        `;
+        
+        container.appendChild(toast);
+        
+        // Auto remove after 5 seconds
+        setTimeout(() => {
+          toast.style.opacity = '0';
+          toast.style.transform = 'translateX(100%)';
+          setTimeout(() => toast.remove(), 300);
+        }, 5000);
+      },
+      
+      // Date formatting
+      formatDate(dateString) {
+        const date = new Date(dateString);
+        return date.toLocaleDateString('en-US', {
+          month: 'short',
+          day: 'numeric',
+          year: 'numeric',
+          hour: '2-digit',
+          minute: '2-digit'
+        });
+      },
+      
+      // JSON parsing with fallback
+      parseJSON(str, fallback = {}) {
+        try {
+          return JSON.parse(str);
+        } catch {
+          return fallback;
+        }
+      },
+      
+      // Loading state
+      showLoading() {
+        this.$('#loadingOverlay').classList.add('active');
+      },
+      
+      hideLoading() {
+        this.$('#loadingOverlay').classList.remove('active');
+      },
+      
+      // Generate unique ID
+      generateId() {
+        return 'prod_' + Math.random().toString(36).substr(2, 9);
+      },
+      
+      // Debounce function for performance
+      debounce(func, wait) {
+        let timeout;
+        return function executedFunction(...args) {
+          const later = () => {
+            clearTimeout(timeout);
+            func(...args);
+          };
+          clearTimeout(timeout);
+          timeout = setTimeout(later, wait);
+        };
+      }
+    };
+
+    // ===== THEME MANAGER =====
+    const themeManager = {
+      init() {
+        this.loadTheme();
+        this.setupEventListeners();
+        this.applyTheme(state.theme);
+      },
+      
+      loadTheme() {
+        const saved = localStorage.getItem('theme');
+        const systemPrefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        
+        if (saved === 'system' || !saved) {
+          state.theme = 'system';
+          this.applySystemTheme();
+        } else {
+          state.theme = saved;
+        }
+      },
+      
+      setupEventListeners() {
+        // Theme buttons
+        utils.$$('.theme-btn').forEach(btn => {
+          btn.addEventListener('click', () => {
+            const theme = btn.dataset.theme;
+            this.setTheme(theme);
+          });
+        });
+        
+        // System theme change listener
+        window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', () => {
+          if (state.theme === 'system') {
+            this.applySystemTheme();
+          }
+        });
+      },
+      
+      setTheme(theme) {
+        state.theme = theme;
+        localStorage.setItem('theme', theme);
+        
+        // Update UI
+        utils.$$('.theme-btn').forEach(btn => {
+          btn.classList.toggle('active', btn.dataset.theme === theme);
+        });
+        
+        // Apply theme
+        if (theme === 'system') {
+          this.applySystemTheme();
+        } else {
+          document.documentElement.setAttribute('data-theme', theme);
+        }
+      },
+      
+      applySystemTheme() {
+        const prefersDark = window.matchMedia('(prefers-color-scheme: dark)').matches;
+        document.documentElement.setAttribute('data-theme', prefersDark ? 'dark' : 'light');
+      }
+    };
+
+    // ===== API SERVICE =====
+    const apiService = {
+      async getProducts() {
+        try {
+          const data = await utils.fetchJSON(CONFIG.endpoints.products);
+          state.products = Array.isArray(data) ? data : [];
+          return state.products;
+        } catch (error) {
+          // Fallback to mock data
+          return this.getMockProducts();
+        }
+      },
+      
+      async createProduct(productData) {
+        try {
+          const response = await utils.fetchJSON(CONFIG.endpoints.products, {
+            method: 'POST',
+            body: JSON.stringify(productData)
+          });
+          
+          utils.showToast('Product created successfully', 'success');
+          return response;
+        } catch (error) {
+          utils.showToast('Failed to create product', 'error');
+          throw error;
+        }
+      },
+      
+      async deleteProduct(productId) {
+        try {
+          await utils.fetchJSON(`${CONFIG.endpoints.products}/${productId}`, {
+            method: 'DELETE'
+          });
+          
+          utils.showToast('Product deleted successfully', 'success');
+          return true;
+        } catch (error) {
+          utils.showToast('Failed to delete product', 'error');
+          throw error;
+        }
+      },
+      
+      async checkServiceHealth() {
+        const health = {
+          productsService: 'unknown',
+          databaseService: 'unknown'
+        };
+        
+        try {
+          const response = await fetch(`${CONFIG.endpoints.productsService}/health`, { signal: AbortSignal.timeout(3000) });
+          health.productsService = response.ok ? 'healthy' : 'unhealthy';
+        } catch {
+          health.productsService = 'unreachable';
+        }
+        
+        try {
+          const response = await fetch(`${CONFIG.endpoints.databaseService}/health`, { signal: AbortSignal.timeout(3000) });
+          health.databaseService = response.ok ? 'healthy' : 'unhealthy';
+        } catch {
+          health.databaseService = 'unreachable';
+        }
+        
+        state.serviceHealth = health;
+        return health;
+      },
+      
+      getMockProducts() {
+        // Fallback mock data
+        return [
+          {
+            id: 'prod_abc123',
+            name: 'Wireless Headphones',
+            type: 'physical',
+            created_at: new Date().toISOString(),
+            metadata: '{"category": "electronics", "price": 149.99}'
+          },
+          {
+            id: 'prod_def456',
+            name: 'E-book: Python Guide',
+            type: 'digital',
+            created_at: new Date(Date.now() - 86400000).toISOString(),
+            metadata: '{"category": "books", "pages": 320}'
+          },
+          {
+            id: 'prod_ghi789',
+            name: 'API Consultation',
+            type: 'service',
+            created_at: new Date(Date.now() - 172800000).toISOString(),
+            metadata: '{"category": "consulting", "duration": "2 hours"}'
+          }
+        ];
+      }
+    };
+
+    // ===== UI COMPONENTS =====
+    const uiComponents = {
+      // Render KPI metrics
+      renderKPIs(products, health) {
+        const container = utils.$('#kpiGrid');
+        const totalProducts = products.length;
+        const types = products.reduce((acc, p) => {
+          acc[p.type] = (acc[p.type] || 0) + 1;
+          return acc;
+        }, {});
+        
+        const kpis = [
+          {
+            title: 'Total Products',
+            value: totalProducts,
+            trend: 'up',
+            subtext: `${types.physical || 0} physical, ${types.digital || 0} digital`,
+            status: totalProducts > 0 ? 'healthy' : 'warning'
+          },
+          {
+            title: 'Cache Performance',
+            value: `${products.length} in cache`,
+            trend: 'neutral',
+            subtext: 'Real-time updates',
+            status: 'healthy'
+          },
+          {
+            title: 'Products Service',
+            value: health.productsService === 'healthy' ? 'Operational' : 'Degraded',
+            trend: health.productsService === 'healthy' ? 'up' : 'down',
+            subtext: 'Render.com',
+            status: health.productsService === 'healthy' ? 'healthy' : 
+                    health.productsService === 'unreachable' ? 'error' : 'warning'
+          },
+          {
+            title: 'Database Service',
+            value: health.databaseService === 'healthy' ? 'Connected' : 'Offline',
+            trend: health.databaseService === 'healthy' ? 'up' : 'down',
+            subtext: 'PythonAnywhere',
+            status: health.databaseService === 'healthy' ? 'healthy' :
+                    health.databaseService === 'unreachable' ? 'error' : 'warning'
+          }
+        ];
+        
+        container.innerHTML = kpis.map(kpi => `
+          <div class="kpi-card">
+            <div class="kpi-header">
+              <div class="kpi-title">${kpi.title}</div>
+              <div class="kpi-status status-${kpi.status}"></div>
+            </div>
+            <div class="kpi-value">${kpi.value}</div>
+            <div class="kpi-trend trend-${kpi.trend}">
+              ${kpi.trend === 'up' ? '↗' : kpi.trend === 'down' ? '↘' : '→'}
+              ${kpi.trend === 'up' ? '12%' : kpi.trend === 'down' ? '5%' : 'Stable'}
+            </div>
+            <div class="kpi-subtext">${kpi.subtext}</div>
+          </div>
+        `).join('');
+      },
+      
+      // Render products table
+      renderProductsTable(products) {
+        const tbody = utils.$('#productsTableBody');
+        const countElement = utils.$('#products-count');
+        
+        // Update count badge
+        if (countElement) {
+          countElement.textContent = products.length;
+        }
+        
+        if (products.length === 0) {
+          tbody.innerHTML = `
+            <tr>
+              <td colspan="5">
+                <div class="empty-state">
+                  <div class="empty-icon">📦</div>
+                  <div class="empty-title">No products yet</div>
+                  <div class="empty-description">Create your first product to get started</div>
+                  <button class="btn btn-primary" id="createFirstProductBtn">
+                    Create Product
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `;
+          
+          utils.$('#createFirstProductBtn')?.addEventListener('click', () => {
+            modalManager.openCreateModal();
+          });
+          return;
+        }
+        
+        tbody.innerHTML = products.map(product => {
+          const metadata = utils.parseJSON(product.metadata || '{}');
+          const typeClass = `type-${product.type}`;
+          const typeLabel = product.type.charAt(0).toUpperCase() + product.type.slice(1);
+          
+          return `
+            <tr data-product-id="${product.id}">
+              <td>
+                <div style="font-weight: 500;">${product.name}</div>
+                <div style="font-size: var(--text-sm); color: var(--color-text-tertiary); margin-top: var(--space-1);">
+                  ${product.id}
+                </div>
+              </td>
+              <td>
+                <span class="product-type ${typeClass}">${typeLabel}</span>
+              </td>
+              <td>${utils.formatDate(product.created_at)}</td>
+              <td>
+                <span style="display: inline-flex; align-items: center; gap: var(--space-1);">
+                  <span style="width: 8px; height: 8px; border-radius: 50%; background: var(--color-success-500);"></span>
+                  <span>Active</span>
+                </span>
+              </td>
+              <td>
+                <div class="table-actions">
+                  <button class="action-btn" onclick="uiComponents.viewProduct('${product.id}')" aria-label="View details">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"></path>
+                      <circle cx="12" cy="12" r="3"></circle>
+                    </svg>
+                  </button>
+                  <button class="action-btn delete" onclick="uiComponents.deleteProduct('${product.id}')" aria-label="Delete product">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                      <polyline points="3 6 5 6 21 6"></polyline>
+                      <path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path>
+                    </svg>
+                  </button>
+                </div>
+              </td>
+            </tr>
+          `;
+        }).join('');
+      },
+      
+      // View product details
+      viewProduct(productId) {
+        const product = state.products.find(p => p.id === productId);
+        if (product) {
+          const metadata = utils.parseJSON(product.metadata || '{}');
+          const details = `
+Product Details:
+
+Name: ${product.name}
+ID: ${product.id}
+Type: ${product.type}
+Created: ${utils.formatDate(product.created_at)}
+Metadata: ${Object.keys(metadata).length > 0 ? JSON.stringify(metadata, null, 2) : 'None'}
+          `;
+          alert(details);
+        }
+      },
+      
+      // Delete product with confirmation
+      async deleteProduct(productId) {
+        if (confirm('Are you sure you want to delete this product? This action cannot be undone.')) {
+          try {
+            await apiService.deleteProduct(productId);
+            await app.refreshData();
+          } catch (error) {
+            // Error already shown by apiService
+          }
+        }
+      }
+    };
+
+    // ===== MODAL MANAGER =====
+    const modalManager = {
+      init() {
+        this.setupEventListeners();
+      },
+      
+      setupEventListeners() {
+        // Open modal
+        utils.$('#createProductBtn').addEventListener('click', () => this.openCreateModal());
+        
+        // Close modal buttons
+        utils.$('#closeModalBtn').addEventListener('click', () => this.closeCreateModal());
+        utils.$('#cancelBtn').addEventListener('click', () => this.closeCreateModal());
+        
+        // Close on overlay click
+        utils.$('#createProductModal').addEventListener('click', (e) => {
+          if (e.target === e.currentTarget) {
+            this.closeCreateModal();
+          }
+        });
+        
+        // Form submission
+        utils.$('#productForm').addEventListener('submit', async (e) => {
+          e.preventDefault();
+          await this.handleFormSubmit();
+        });
+      },
+      
+      openCreateModal() {
+        utils.$('#createProductModal').classList.add('open');
+        utils.$('#productName').focus();
+      },
+      
+      closeCreateModal() {
+        utils.$('#createProductModal').classList.remove('open');
+        utils.$('#productForm').reset();
+      },
+      
+      async handleFormSubmit() {
+        const productData = {
+          name: utils.$('#productName').value.trim(),
+          type: utils.$('#productType').value,
+          metadata: utils.$('#productMetadata').value.trim() || {}
+        };
+        
+        // Validate
+        if (!productData.name || !productData.type) {
+          utils.showToast('Please fill in all required fields', 'error');
+          return;
+        }
+        
+        // Parse metadata if provided
+        if (productData.metadata && typeof productData.metadata === 'string') {
+          try {
+            productData.metadata = JSON.parse(productData.metadata);
+          } catch {
+            utils.showToast('Invalid JSON in metadata field', 'error');
+            return;
+          }
+        }
+        
+        try {
+          await apiService.createProduct(productData);
+          this.closeCreateModal();
+          await app.refreshData();
+        } catch (error) {
+          // Error already shown by apiService
+        }
+      }
+    };
+
+    // ===== MOBILE NAVIGATION =====
+    const mobileNav = {
+      init() {
+        utils.$('#mobileMenuBtn').addEventListener('click', () => this.toggleSidebar());
+        
+        // Close sidebar when clicking outside on mobile
+        document.addEventListener('click', (e) => {
+          const sidebar = utils.$('#sidebar');
+          const menuBtn = utils.$('#mobileMenuBtn');
+          if (window.innerWidth < 1024 && 
+              !sidebar.contains(e.target) && 
+              !menuBtn.contains(e.target) && 
+              sidebar.classList.contains('open')) {
+            this.toggleSidebar();
+          }
+        });
+      },
+      
+      toggleSidebar() {
+        utils.$('#sidebar').classList.toggle('open');
+      }
+    };
+
+    // ===== MAIN APPLICATION =====
+    const app = {
+      async init() {
+        console.log('🚀 Initializing ProductSaaS Pro Dashboard...');
+        
+        // Initialize managers
+        themeManager.init();
+        mobileNav.init();
+        modalManager.init();
+        
+        // Load initial data
+        await this.refreshData();
+        
+        // Set up auto-refresh
+        this.setupAutoRefresh();
+        
+        // Set up event listeners
+        this.setupEventListeners();
+        
+        console.log('✅ Dashboard initialized successfully');
+      },
+      
+      async refreshData() {
+        try {
+          const [products, health] = await Promise.all([
+            apiService.getProducts(),
+            apiService.checkServiceHealth()
+          ]);
+          
+          // Update UI
+          uiComponents.renderKPIs(products, health);
+          uiComponents.renderProductsTable(products);
+          
+        } catch (error) {
+          console.error('Failed to refresh data:', error);
+        }
+      },
+      
+      setupAutoRefresh() {
+        // Auto-refresh every 30 seconds
+        setInterval(() => {
+          if (!state.isLoading && document.visibilityState === 'visible') {
+            this.refreshData();
+          }
+        }, CONFIG.refreshInterval);
+      },
+      
+      setupEventListeners() {
+        // Refresh button
+        utils.$('#refreshBtn').addEventListener('click', async () => {
+          utils.showToast('Refreshing data...', 'info');
+          await this.refreshData();
+        });
+        
+        // Navigation
+        utils.$$('.nav-link').forEach(link => {
+          link.addEventListener('click', (e) => {
+            e.preventDefault();
+            this.handleNavigation(link);
+          });
+        });
+        
+        // Keyboard shortcuts
+        document.addEventListener('keydown', (e) => {
+          // Ctrl/Cmd + N to create new product
+          if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+            e.preventDefault();
+            modalManager.openCreateModal();
+          }
+          
+          // Escape to close modal
+          if (e.key === 'Escape') {
+            modalManager.closeCreateModal();
+          }
+        });
+      },
+      
+      handleNavigation(link) {
+        // Update active state
+        utils.$$('.nav-link').forEach(l => l.classList.remove('active'));
+        link.classList.add('active');
+        
+        // Update view (simplified - in full app would load different views)
+        const route = link.getAttribute('href').substring(1);
+        utils.showToast(`Switched to ${route} view`, 'info');
+      }
+    };
+
+    // ===== INITIALIZE APP =====
+    document.addEventListener('DOMContentLoaded', () => app.init());
+
+    // Export for debugging
+    window.app = app;
+    window.apiService = apiService;
+    window.uiComponents = uiComponents;
+  </script>
+</body>
+</html>
