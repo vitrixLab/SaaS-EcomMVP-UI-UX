@@ -56,7 +56,7 @@ Open index.html in your browser.
 
 Explore the dashboard and interact with the MVP features (e.g., add a product).
 
-Note: This is a static UI prototype — no backend or data persistence is included.
+Note: This is a static UI prototype — with web service backend and data persistence included.
 ---
 
 🛠 Tech Stack
