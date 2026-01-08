@@ -27,7 +27,7 @@ The goal of this MVP is to validate core user flows and UI/UX assumptions before
 
 ## 📁 Project Structure
 
-/
+```
 ├── index.html
 ├── styles/
 │ └── main.css
@@ -36,9 +36,7 @@ The goal of this MVP is to validate core user flows and UI/UX assumptions before
 ├── assets/
 │ └── icons, fonts, images
 └── README.md
-
-markdown
-Copy code
+```
 
 ## 📌 Design Principles
 
