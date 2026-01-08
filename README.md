@@ -57,7 +57,7 @@ Open index.html in your browser.
 Explore the dashboard and interact with the MVP features (e.g., add a product).
 
 Note: This is a static UI prototype — no backend or data persistence is included.
-
+---
 🛠 Tech Stack
 HTML
 
@@ -66,7 +66,7 @@ CSS
 Vanilla JavaScript
 
 No frameworks required — designed to be lightweight and easily extensible.
-
+---
 📌 Next Steps / Roadmap Ideas
 These are suggestions for future development:
 
@@ -75,10 +75,10 @@ These are suggestions for future development:
 🔹 Add authentication
 🔹 Enhance analytics views with real charts
 🔹 Polish responsive behavior & mobile UX
-
+---
 💬 Feedback / Contributing
 Contributions, suggestions, and feedback are welcome!
 Feel free to open issues or pull requests to help improve this MVP.
-
+---
 📜 License
 This project is open source and available under the MIT License.
