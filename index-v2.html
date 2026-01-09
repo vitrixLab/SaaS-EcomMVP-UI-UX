@@ -14,6 +14,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
+  <!-- Google Identity Services -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  
   <style>
     /* ===== CSS VARIABLES & DESIGN SYSTEM ===== */
     :root {
@@ -1483,44 +1486,6 @@
       color: white;
     }
 
-    /* ===== LOGIN MODAL ===== */
-    .login-modal {
-      background: var(--color-bg-elevated);
-      border-radius: var(--radius-2xl);
-      width: 90%;
-      max-width: 400px;
-      padding: var(--space-8);
-      text-align: center;
-      box-shadow: var(--shadow-2xl);
-      border: 1px solid var(--color-border);
-    }
-
-    .login-icon {
-      width: 80px;
-      height: 80px;
-      border-radius: var(--radius-full);
-      background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-700));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto var(--space-6);
-      color: white;
-      font-size: var(--text-2xl);
-      font-weight: 700;
-      box-shadow: var(--shadow-lg);
-    }
-
-    .login-title {
-      font-size: var(--text-2xl);
-      font-weight: 700;
-      margin-bottom: var(--space-2);
-    }
-
-    .login-subtitle {
-      color: var(--color-text-secondary);
-      margin-bottom: var(--space-6);
-    }
-
     /* ===== LOADING OVERLAY ===== */
     .loading-overlay {
       position: fixed;
@@ -1591,6 +1556,52 @@
       margin: 0 auto var(--space-6);
     }
 
+    /* ===== GOOGLE SIGN IN BUTTON ===== */
+    .google-signin-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: var(--z-modal);
+      background: var(--color-bg-elevated);
+      padding: var(--space-8);
+      border-radius: var(--radius-2xl);
+      box-shadow: var(--shadow-2xl);
+      border: 1px solid var(--color-border);
+      min-width: 350px;
+    }
+
+    .google-signin-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: var(--radius-full);
+      background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-700));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto var(--space-6);
+      color: white;
+      font-size: var(--text-2xl);
+      font-weight: 700;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .google-signin-title {
+      font-size: var(--text-2xl);
+      font-weight: 700;
+      margin-bottom: var(--space-2);
+    }
+
+    .google-signin-subtitle {
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-6);
+    }
+
+    #googleSignInBtn {
+      margin: 0 auto var(--space-4);
+    }
+
     /* ===== RESPONSIVE DESIGN ===== */
     @media (max-width: 768px) {
       .content-container {
@@ -1638,6 +1649,12 @@
         margin-top: var(--space-2);
         width: 100%;
         justify-content: flex-end;
+      }
+
+      .google-signin-container {
+        min-width: 90%;
+        padding: var(--space-6);
+        margin: 0 var(--space-4);
       }
     }
 
@@ -1736,10 +1753,10 @@
 
       <div class="sidebar-footer">
         <div class="user-menu"> 
-          <div class="user-avatar" id="userAvatar">PS</div>
+          <div class="user-avatar" id="userAvatar">U</div>
           <div class="user-info">
-            <div class="user-name" id="userName">Product Admin</div>
-            <div class="user-email" id="userEmail">admin@productsaas.com</div>
+            <div class="user-name" id="userName">Loading...</div>
+            <div class="user-email" id="userEmail">loading@example.com</div>
           </div>
           <div class="user-actions">
             <button class="logout-btn" id="logoutBtn" aria-label="Logout" title="Logout">
@@ -1805,6 +1822,20 @@
     </main>
   </div>
 
+  <!-- Google Sign-in Container (Shown when not logged in) -->
+  <div class="google-signin-container" id="googleSignInContainer">
+    <div class="google-signin-icon">PS</div>
+    <h2 class="google-signin-title">ProductSaaS Dashboard</h2>
+    <p class="google-signin-subtitle">Sign in with Google to access your dashboard</p>
+    
+    <!-- Google Sign In Button -->
+    <div id="googleSignInBtn"></div>
+    
+    <p style="margin-top: var(--space-4); color: var(--color-text-tertiary); font-size: var(--text-sm);">
+      Sign in to manage your microservices e-commerce platform
+    </p>
+  </div>
+
   <!-- Create Product Modal -->
   <div class="modal-overlay" id="createProductModal">
     <div class="modal">
@@ -1858,57 +1889,6 @@
     </div>
   </div>
 
-  <!-- Login Modal -->
-  <div class="modal-overlay" id="loginModal">
-    <div class="login-modal">
-      <div class="login-icon">PS</div>
-      <h2 class="login-title">Welcome Back</h2>
-      <p class="login-subtitle">Sign in to your ProductSaaS dashboard</p>
-      
-      <form id="loginForm">
-        <div class="form-group">
-          <label class="form-label" for="loginEmail">Email Address</label>
-          <input 
-            type="email" 
-            id="loginEmail" 
-            class="form-control" 
-            placeholder="Enter your email"
-            required
-            autocomplete="email"
-            value="admin@productsaas.com"
-          >
-        </div>
-        <div class="form-group">
-          <label class="form-label" for="loginPassword">Password</label>
-          <input 
-            type="password" 
-            id="loginPassword" 
-            class="form-control" 
-            placeholder="Enter your password"
-            required
-            autocomplete="current-password"
-            value="password123"
-          >
-        </div>
-        <div class="form-actions">
-          <button type="submit" class="btn btn-primary" style="width: 100%;">
-            Sign In
-          </button>
-        </div>
-      </form>
-      
-      <div style="margin-top: var(--space-6);">
-        <button class="btn btn-secondary" id="demoLoginBtn" style="width: 100%;">
-          Use Demo Account
-        </button>
-      </div>
-      
-      <p style="margin-top: var(--space-6); color: var(--color-text-tertiary); font-size: var(--text-sm);">
-        Demo credentials: admin@productsaas.com / password123
-      </p>
-    </div>
-  </div>
-
   <!-- Toast Container -->
   <div class="toast-container" id="toastContainer"></div>
 
@@ -1928,9 +1908,11 @@
       },
       refreshInterval: 30000,
       skeletonDelay: 1000,
+      googleClientId: 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com', // Replace with your actual Google Client ID
+      logoutRedirectUrl: 'https://vitrixlab.github.io/SaaS-EcomMVP-UI-UX/home-v2.html',
       storageKeys: {
         user: 'productsaas_user',
-        session: 'productsaas_session'
+        token: 'productsaas_token'
       }
     };
 
@@ -1945,58 +1927,155 @@
         database: 'unknown'
       },
       user: null,
+      googleAuth: null,
       isAuthenticated: false
     };
 
-    // ===== USER MANAGEMENT =====
-    const UserManager = {
+    // ===== GOOGLE AUTH INTEGRATION =====
+    const GoogleAuth = {
       init() {
-        this.loadUser();
-        if (!state.user) {
-          this.showLogin();
-        } else {
-          this.updateUserUI();
-        }
+        this.initializeGoogleSignIn();
+        this.loadUserFromStorage();
       },
       
-      loadUser() {
+      initializeGoogleSignIn() {
+        // Initialize Google Identity Services
+        window.google.accounts.id.initialize({
+          client_id: CONFIG.googleClientId,
+          callback: this.handleCredentialResponse.bind(this),
+          auto_select: false,
+          cancel_on_tap_outside: true
+        });
+        
+        // Render Google Sign In button
+        window.google.accounts.id.renderButton(
+          document.getElementById('googleSignInBtn'),
+          {
+            theme: state.theme === 'dark' ? 'filled_black' : 'outline',
+            size: 'large',
+            type: 'standard',
+            shape: 'pill',
+            text: 'signin_with',
+            logo_alignment: 'left'
+          }
+        );
+        
+        // Also show the One Tap dialog
+        window.google.accounts.id.prompt();
+      },
+      
+      handleCredentialResponse(response) {
+        console.log('Google Auth Response:', response);
+        
+        // Decode the JWT token to get user info
+        const payload = JSON.parse(atob(response.credential.split('.')[1]));
+        
+        // Store the user information
+        UserManager.saveUser({
+          email: payload.email,
+          name: payload.name || payload.email.split('@')[0],
+          picture: payload.picture,
+          googleId: payload.sub,
+          token: response.credential
+        });
+        
+        // Hide sign-in container and show dashboard
+        this.hideSignIn();
+        
+        // Initialize dashboard
+        Navigation.init();
+      },
+      
+      loadUserFromStorage() {
         const userData = localStorage.getItem(CONFIG.storageKeys.user);
         if (userData) {
           try {
-            state.user = JSON.parse(userData);
-            state.isAuthenticated = true;
+            const user = JSON.parse(userData);
+            UserManager.saveUser(user, false); // Don't show toast on load
+            this.hideSignIn();
+            Navigation.init();
           } catch (error) {
             console.error('Failed to parse user data:', error);
-            this.clearUser();
+            UserManager.clearUser();
           }
         }
       },
       
-      saveUser(userData) {
+      showSignIn() {
+        UI.$('#googleSignInContainer').style.display = 'block';
+        UI.$('#mainContent').style.display = 'none';
+        UI.$('#sidebar').style.display = 'none';
+      },
+      
+      hideSignIn() {
+        UI.$('#googleSignInContainer').style.display = 'none';
+        UI.$('#mainContent').style.display = 'block';
+        UI.$('#sidebar').style.display = 'flex';
+      },
+      
+      logout() {
+        // Clear Google session
+        if (window.google && window.google.accounts) {
+          window.google.accounts.id.disableAutoSelect();
+          window.google.accounts.id.revoke(state.user?.email, (done) => {
+            console.log('Google session revoked');
+          });
+        }
+        
+        // Clear local storage
+        UserManager.clearUser();
+        
+        // Redirect to home page
+        window.location.href = CONFIG.logoutRedirectUrl;
+      }
+    };
+
+    // ===== USER MANAGEMENT =====
+    const UserManager = {
+      saveUser(userData, showToast = true) {
         state.user = {
           ...userData,
           loggedInAt: new Date().toISOString(),
-          avatarText: this.getAvatarText(userData.email)
+          avatarText: this.getAvatarText(userData.email, userData.name)
         };
+        
         localStorage.setItem(CONFIG.storageKeys.user, JSON.stringify(state.user));
+        if (userData.token) {
+          localStorage.setItem(CONFIG.storageKeys.token, userData.token);
+        }
+        
         state.isAuthenticated = true;
         this.updateUserUI();
-        UI.showToast(`Welcome back, ${state.user.name}!`, 'success', 'Login Successful');
+        
+        if (showToast) {
+          UI.showToast(`Welcome, ${state.user.name}!`, 'success', 'Login Successful');
+        }
       },
       
-      getAvatarText(email) {
+      getAvatarText(email, name) {
+        if (name && name.length >= 2) {
+          return name.substring(0, 2).toUpperCase();
+        }
         return email.substring(0, 2).toUpperCase();
       },
       
       updateUserUI() {
         if (!state.user) return;
         
-        // Update sidebar
+        // Update sidebar user info
         UI.$('#userAvatar').textContent = state.user.avatarText;
         UI.$('#userName').textContent = state.user.name;
         UI.$('#userEmail').textContent = state.user.email;
         
-        // Update user info click handler
+        // Update avatar if we have a picture
+        if (state.user.picture) {
+          UI.$('#userAvatar').style.backgroundImage = `url(${state.user.picture})`;
+          UI.$('#userAvatar').style.backgroundSize = 'cover';
+          UI.$('#userAvatar').style.backgroundPosition = 'center';
+          UI.$('#userAvatar').textContent = '';
+        }
+        
+        // Add click handler to email
         UI.$('#userEmail').addEventListener('click', () => {
           this.showUserProfile();
         });
@@ -2006,55 +2085,14 @@
         if (!state.user) return;
         
         const lastLogin = new Date(state.user.loggedInAt).toLocaleString();
-        alert(`User Profile\n\nName: ${state.user.name}\nEmail: ${state.user.email}\nLast Login: ${lastLogin}\n\nYou can change your email by editing it below:`);
-        
-        const newEmail = prompt('Enter new email address:', state.user.email);
-        if (newEmail && newEmail !== state.user.email) {
-          const updatedUser = { ...state.user, email: newEmail };
-          this.saveUser(updatedUser);
-        }
-      },
-      
-      login(email, password, name) {
-        // Simulate API call - in real app, this would be a fetch request
-        return new Promise((resolve, reject) => {
-          setTimeout(() => {
-            if (email && password) {
-              this.saveUser({
-                email,
-                name: name || email.split('@')[0],
-                role: 'admin'
-              });
-              resolve();
-            } else {
-              reject(new Error('Invalid credentials'));
-            }
-          }, 1000);
-        });
-      },
-      
-      logout() {
-        if (confirm('Are you sure you want to logout?')) {
-          this.clearUser();
-          this.showLogin();
-          UI.showToast('You have been logged out', 'info', 'Logout Successful');
-        }
+        alert(`User Profile\n\nName: ${state.user.name}\nEmail: ${state.user.email}\nLast Login: ${lastLogin}\n\nGoogle ID: ${state.user.googleId || 'N/A'}`);
       },
       
       clearUser() {
         state.user = null;
         state.isAuthenticated = false;
         localStorage.removeItem(CONFIG.storageKeys.user);
-      },
-      
-      showLogin() {
-        UI.$('#loginModal').classList.add('open');
-        UI.$('#loginEmail').focus();
-      },
-      
-      hideLogin() {
-        UI.$('#loginModal').classList.remove('open');
-        UI.$('#loginForm').reset();
+        localStorage.removeItem(CONFIG.storageKeys.token);
       }
     };
 
@@ -2139,6 +2177,29 @@
         UI.$$('.theme-btn').forEach(btn => {
           btn.classList.toggle('active', btn.dataset.theme === theme);
         });
+        
+        // Update Google button theme if needed
+        if (window.google && window.google.accounts) {
+          this.updateGoogleButtonTheme();
+        }
+      },
+      
+      updateGoogleButtonTheme() {
+        const googleBtn = UI.$('#googleSignInBtn');
+        if (googleBtn && googleBtn.firstChild) {
+          googleBtn.innerHTML = '';
+          window.google.accounts.id.renderButton(
+            googleBtn,
+            {
+              theme: state.theme === 'dark' ? 'filled_black' : 'outline',
+              size: 'large',
+              type: 'standard',
+              shape: 'pill',
+              text: 'signin_with',
+              logo_alignment: 'left'
+            }
+          );
+        }
       },
       
       setupEventListeners() {
@@ -2153,6 +2214,11 @@
     // ===== NAVIGATION MANAGER =====
     const Navigation = {
       init() {
+        if (!state.isAuthenticated) {
+          GoogleAuth.showSignIn();
+          return;
+        }
+        
         this.setupEventListeners();
         this.loadView('dashboard');
       },
@@ -2183,7 +2249,9 @@
         
         // Logout button
         UI.$('#logoutBtn').addEventListener('click', () => {
-          UserManager.logout();
+          if (confirm('Are you sure you want to logout?')) {
+            GoogleAuth.logout();
+          }
         });
         
         // Close sidebar on resize to desktop
@@ -2413,7 +2481,7 @@
                   <div class="kpi-trend trend-neutral">→</div>
                 </div>
                 <div class="kpi-content">
-                  <div class="kpi-value">${state.user?.email.split('@')[0] || 'Admin'}</div>
+                  <div class="kpi-value">${state.user?.email.split('@')[0] || 'User'}</div>
                   <div class="kpi-label">Current User</div>
                   <div class="kpi-progress">
                     <div class="kpi-progress-bar" style="width: 100%"></div>
@@ -2526,7 +2594,7 @@
                   <div class="kpi-trend trend-neutral">→</div>
                 </div>
                 <div class="kpi-content">
-                  <div class="kpi-value">${state.user?.name || 'Admin'}</div>
+                  <div class="kpi-value">${state.user?.name || 'User'}</div>
                   <div class="kpi-label">Logged in as</div>
                   <div class="kpi-progress">
                     <div class="kpi-progress-bar" style="width: 100%"></div>
@@ -2632,7 +2700,7 @@
                 <div class="stat-item">
                   <div class="stat-icon">👤</div>
                   <div class="stat-content">
-                    <div class="stat-value">${state.user?.email.split('@')[0] || 'Admin'}</div>
+                    <div class="stat-value">${state.user?.email.split('@')[0] || 'User'}</div>
                     <div class="stat-label">Current User</div>
                   </div>
                 </div>
@@ -2883,6 +2951,7 @@
               if (confirm('Clear all cached data?')) {
                 localStorage.removeItem('theme');
                 localStorage.removeItem(CONFIG.storageKeys.user);
+                localStorage.removeItem(CONFIG.storageKeys.token);
                 location.reload();
               }
             });
@@ -3063,18 +3132,6 @@
           await this.handleSubmit();
         });
         
-        // Login form submission
-        UI.$('#loginForm').addEventListener('submit', async (e) => {
-          e.preventDefault();
-          await this.handleLogin();
-        });
-        
-        // Demo login button
-        UI.$('#demoLoginBtn').addEventListener('click', async (e) => {
-          e.preventDefault();
-          await this.handleDemoLogin();
-        });
-        
         // Close modal buttons
         UI.$('#closeModalBtn').addEventListener('click', () => this.closeProductModal());
         UI.$('#cancelBtn').addEventListener('click', () => this.closeProductModal());
@@ -3084,18 +3141,11 @@
           if (e.target === e.currentTarget) this.closeProductModal();
         });
         
-        UI.$('#loginModal').addEventListener('click', (e) => {
-          if (e.target === e.currentTarget) this.closeLoginModal();
-        });
-        
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
           if (e.key === 'Escape') {
             if (UI.$('#createProductModal').classList.contains('open')) {
               this.closeProductModal();
-            }
-            if (UI.$('#loginModal').classList.contains('open')) {
-              this.closeLoginModal();
             }
           }
           if ((e.ctrlKey || e.metaKey) && e.key === 'n' && state.isAuthenticated) {
@@ -3113,11 +3163,6 @@
       closeProductModal() {
         UI.$('#createProductModal').classList.remove('open');
         UI.$('#productForm').reset();
-      },
-      
-      closeLoginModal() {
-        UI.$('#loginModal').classList.remove('open');
-        UI.$('#loginForm').reset();
       },
       
       async handleSubmit() {
@@ -3148,33 +3193,6 @@
         } catch (error) {
           // Error handled by ApiService
         }
-      },
-      
-      async handleLogin() {
-        const email = UI.$('#loginEmail').value.trim();
-        const password = UI.$('#loginPassword').value;
-        
-        if (!email || !password) {
-          UI.showToast('Please enter email and password', 'error', 'Validation Error');
-          return;
-        }
-        
-        UI.showLoading();
-        try {
-          await UserManager.login(email, password);
-          this.closeLoginModal();
-          Navigation.loadView('dashboard');
-        } catch (error) {
-          UI.showToast('Invalid email or password', 'error', 'Login Failed');
-        } finally {
-          UI.hideLoading();
-        }
-      },
-      
-      async handleDemoLogin() {
-        UI.$('#loginEmail').value = 'admin@productsaas.com';
-        UI.$('#loginPassword').value = 'password123';
-        await this.handleLogin();
       }
     };
 
@@ -3183,10 +3201,20 @@
       async init() {
         console.log('🚀 Initializing ProductSaaS Dashboard...');
         
-        // Initialize managers
-        UserManager.init();
+        // Initialize theme first
         ThemeManager.init();
-        Navigation.init();
+        
+        // Wait for Google Identity Services to load
+        if (typeof google === 'undefined') {
+          console.error('Google Identity Services not loaded');
+          // Fallback: Check if we have stored user data
+          GoogleAuth.loadUserFromStorage();
+        } else {
+          // Initialize Google Auth
+          GoogleAuth.init();
+        }
+        
+        // Initialize Modal Manager
         ModalManager.init();
         
         // Setup refresh button
@@ -3212,12 +3240,22 @@
     };
 
     // ===== INITIALIZE =====
-    document.addEventListener('DOMContentLoaded', () => App.init());
+    // Wait for Google Identity Services to load
+    if (typeof google !== 'undefined') {
+      document.addEventListener('DOMContentLoaded', () => App.init());
+    } else {
+      // Fallback if Google script doesn't load
+      document.addEventListener('DOMContentLoaded', () => {
+        console.warn('Google Identity Services not loaded, using fallback');
+        App.init();
+      });
+    }
 
     // Global exports for debugging
     window.App = App;
     window.Navigation = Navigation;
     window.ApiService = ApiService;
+    window.GoogleAuth = GoogleAuth;
     window.UserManager = UserManager;
   </script>
 </body>
