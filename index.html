@@ -14,9 +14,6 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
-  <!-- Google Identity Services -->
-  <script src="https://accounts.google.com/gsi/client" async defer></script>
-  
   <style>
     /* ===== CSS VARIABLES & DESIGN SYSTEM ===== */
     :root {
@@ -1486,6 +1483,52 @@
       color: white;
     }
 
+    /* ===== SIGN-IN CONTAINER ===== */
+    .signin-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: var(--z-modal);
+      background: var(--color-bg-elevated);
+      padding: var(--space-8);
+      border-radius: var(--radius-2xl);
+      box-shadow: var(--shadow-2xl);
+      border: 1px solid var(--color-border);
+      min-width: 350px;
+    }
+
+    .signin-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: var(--radius-full);
+      background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-700));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto var(--space-6);
+      color: white;
+      font-size: var(--text-2xl);
+      font-weight: 700;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .signin-title {
+      font-size: var(--text-2xl);
+      font-weight: 700;
+      margin-bottom: var(--space-2);
+    }
+
+    .signin-subtitle {
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-6);
+    }
+
+    #signinBtn {
+      margin: 0 auto var(--space-4);
+    }
+
     /* ===== LOADING OVERLAY ===== */
     .loading-overlay {
       position: fixed;
@@ -1556,52 +1599,6 @@
       margin: 0 auto var(--space-6);
     }
 
-    /* ===== GOOGLE SIGN IN BUTTON ===== */
-    .google-signin-container {
-      position: fixed;
-      top: 50%;
-      left: 50%;
-      transform: translate(-50%, -50%);
-      text-align: center;
-      z-index: var(--z-modal);
-      background: var(--color-bg-elevated);
-      padding: var(--space-8);
-      border-radius: var(--radius-2xl);
-      box-shadow: var(--shadow-2xl);
-      border: 1px solid var(--color-border);
-      min-width: 350px;
-    }
-
-    .google-signin-icon {
-      width: 80px;
-      height: 80px;
-      border-radius: var(--radius-full);
-      background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-700));
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      margin: 0 auto var(--space-6);
-      color: white;
-      font-size: var(--text-2xl);
-      font-weight: 700;
-      box-shadow: var(--shadow-lg);
-    }
-
-    .google-signin-title {
-      font-size: var(--text-2xl);
-      font-weight: 700;
-      margin-bottom: var(--space-2);
-    }
-
-    .google-signin-subtitle {
-      color: var(--color-text-secondary);
-      margin-bottom: var(--space-6);
-    }
-
-    #googleSignInBtn {
-      margin: 0 auto var(--space-4);
-    }
-
     /* ===== RESPONSIVE DESIGN ===== */
     @media (max-width: 768px) {
       .content-container {
@@ -1651,7 +1648,7 @@
         justify-content: flex-end;
       }
 
-      .google-signin-container {
+      .signin-container {
         min-width: 90%;
         padding: var(--space-6);
         margin: 0 var(--space-4);
@@ -1822,14 +1819,19 @@
     </main>
   </div>
 
-  <!-- Google Sign-in Container (Shown when not logged in) -->
-  <div class="google-signin-container" id="googleSignInContainer">
-    <div class="google-signin-icon">PS</div>
-    <h2 class="google-signin-title">ProductSaaS Dashboard</h2>
-    <p class="google-signin-subtitle">Sign in with Google to access your dashboard</p>
+  <!-- Sign-in Container (Shown when not logged in) -->
+  <div class="signin-container" id="signinContainer">
+    <div class="signin-icon">PS</div>
+    <h2 class="signin-title">ProductSaaS Dashboard</h2>
+    <p class="signin-subtitle">Sign in to access your dashboard</p>
     
-    <!-- Google Sign In Button -->
-    <div id="googleSignInBtn"></div>
+    <!-- Sign In Button -->
+    <button class="btn btn-primary" id="signinBtn">
+      <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+        <path d="M18 2h-3a5 5 0 0 0-5 5v3H7v4h3v8h4v-8h3l1-4h-4V7a1 1 0 0 1 1-1h3z"></path>
+      </svg>
+      Sign in with Google
+    </button>
     
     <p style="margin-top: var(--space-4); color: var(--color-text-tertiary); font-size: var(--text-sm);">
       Sign in to manage your microservices e-commerce platform
@@ -1908,8 +1910,8 @@
       },
       refreshInterval: 30000,
       skeletonDelay: 1000,
-      googleClientId: 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com', // Replace with your actual Google Client ID
       logoutRedirectUrl: 'https://vitrixlab.github.io/SaaS-EcomMVP-UI-UX/home-v2.html',
+      authRedirectUrl: 'YOUR_GOOGLE_AUTH_URL_HERE', // Your Google OAuth URL
       storageKeys: {
         user: 'productsaas_user',
         token: 'productsaas_token'
@@ -1927,136 +1929,96 @@
         database: 'unknown'
       },
       user: null,
-      googleAuth: null,
       isAuthenticated: false
     };
 
-    // ===== GOOGLE AUTH INTEGRATION =====
-    const GoogleAuth = {
-      init() {
-        this.initializeGoogleSignIn();
-        this.loadUserFromStorage();
-      },
-      
-      initializeGoogleSignIn() {
-        // Initialize Google Identity Services
-        window.google.accounts.id.initialize({
-          client_id: CONFIG.googleClientId,
-          callback: this.handleCredentialResponse.bind(this),
-          auto_select: false,
-          cancel_on_tap_outside: true
-        });
+    // ===== URL TOKEN PARSER =====
+    const URLTokenParser = {
+      parseTokenFromURL() {
+        const urlParams = new URLSearchParams(window.location.search);
+        const authSuccess = urlParams.get('auth_success');
+        const tokenParam = urlParams.get('token');
         
-        // Render Google Sign In button
-        window.google.accounts.id.renderButton(
-          document.getElementById('googleSignInBtn'),
-          {
-            theme: state.theme === 'dark' ? 'filled_black' : 'outline',
-            size: 'large',
-            type: 'standard',
-            shape: 'pill',
-            text: 'signin_with',
-            logo_alignment: 'left'
+        if (authSuccess === 'true' && tokenParam) {
+          try {
+            // The token is URL-encoded JSON, decode it
+            const decodedToken = decodeURIComponent(tokenParam);
+            const userData = JSON.parse(decodedToken);
+            
+            // Clean up URL by removing the auth parameters
+            this.cleanURL();
+            
+            return userData;
+          } catch (error) {
+            console.error('Failed to parse token from URL:', error);
+            return null;
           }
-        );
-        
-        // Also show the One Tap dialog
-        window.google.accounts.id.prompt();
+        }
+        return null;
       },
       
-      handleCredentialResponse(response) {
-        console.log('Google Auth Response:', response);
+      cleanURL() {
+        // Remove auth parameters from URL without reloading
+        const cleanUrl = window.location.pathname;
+        window.history.replaceState({}, document.title, cleanUrl);
+      }
+    };
+
+    // ===== USER MANAGEMENT =====
+    const UserManager = {
+      init() {
+        // First check if we have a token in the URL (from Google OAuth redirect)
+        const urlUserData = URLTokenParser.parseTokenFromURL();
+        if (urlUserData) {
+          this.saveUser(urlUserData);
+          this.showDashboard();
+          return;
+        }
         
-        // Decode the JWT token to get user info
-        const payload = JSON.parse(atob(response.credential.split('.')[1]));
-        
-        // Store the user information
-        UserManager.saveUser({
-          email: payload.email,
-          name: payload.name || payload.email.split('@')[0],
-          picture: payload.picture,
-          googleId: payload.sub,
-          token: response.credential
-        });
-        
-        // Hide sign-in container and show dashboard
-        this.hideSignIn();
-        
-        // Initialize dashboard
-        Navigation.init();
+        // Then check localStorage for existing session
+        this.loadUserFromStorage();
+        if (state.user) {
+          this.showDashboard();
+        } else {
+          this.showSignIn();
+        }
       },
       
       loadUserFromStorage() {
         const userData = localStorage.getItem(CONFIG.storageKeys.user);
         if (userData) {
           try {
-            const user = JSON.parse(userData);
-            UserManager.saveUser(user, false); // Don't show toast on load
-            this.hideSignIn();
-            Navigation.init();
+            state.user = JSON.parse(userData);
+            state.isAuthenticated = true;
           } catch (error) {
             console.error('Failed to parse user data:', error);
-            UserManager.clearUser();
+            this.clearUser();
           }
         }
       },
       
-      showSignIn() {
-        UI.$('#googleSignInContainer').style.display = 'block';
-        UI.$('#mainContent').style.display = 'none';
-        UI.$('#sidebar').style.display = 'none';
-      },
-      
-      hideSignIn() {
-        UI.$('#googleSignInContainer').style.display = 'none';
-        UI.$('#mainContent').style.display = 'block';
-        UI.$('#sidebar').style.display = 'flex';
-      },
-      
-      logout() {
-        // Clear Google session
-        if (window.google && window.google.accounts) {
-          window.google.accounts.id.disableAutoSelect();
-          window.google.accounts.id.revoke(state.user?.email, (done) => {
-            console.log('Google session revoked');
-          });
-        }
-        
-        // Clear local storage
-        UserManager.clearUser();
-        
-        // Redirect to home page
-        window.location.href = CONFIG.logoutRedirectUrl;
-      }
-    };
-
-    // ===== USER MANAGEMENT =====
-    const UserManager = {
-      saveUser(userData, showToast = true) {
+      saveUser(userData) {
         state.user = {
           ...userData,
           loggedInAt: new Date().toISOString(),
-          avatarText: this.getAvatarText(userData.email, userData.name)
+          avatarText: this.getAvatarText(userData.name || userData.email)
         };
         
         localStorage.setItem(CONFIG.storageKeys.user, JSON.stringify(state.user));
-        if (userData.token) {
-          localStorage.setItem(CONFIG.storageKeys.token, userData.token);
-        }
-        
         state.isAuthenticated = true;
         this.updateUserUI();
         
-        if (showToast) {
-          UI.showToast(`Welcome, ${state.user.name}!`, 'success', 'Login Successful');
-        }
+        UI.showToast(`Welcome, ${state.user.name}!`, 'success', 'Login Successful');
       },
       
-      getAvatarText(email, name) {
-        if (name && name.length >= 2) {
-          return name.substring(0, 2).toUpperCase();
+      getAvatarText(nameOrEmail, email) {
+        if (nameOrEmail && nameOrEmail.length >= 2) {
+          return nameOrEmail.substring(0, 2).toUpperCase();
         }
-        return email.substring(0, 2).toUpperCase();
+        if (email && email.length >= 2) {
+          return email.substring(0, 2).toUpperCase();
+        }
+        return 'U';
       },
       
       updateUserUI() {
@@ -2064,16 +2026,8 @@
         
         // Update sidebar user info
         UI.$('#userAvatar').textContent = state.user.avatarText;
-        UI.$('#userName').textContent = state.user.name;
+        UI.$('#userName').textContent = state.user.name || state.user.email.split('@')[0];
         UI.$('#userEmail').textContent = state.user.email;
-        
-        // Update avatar if we have a picture
-        if (state.user.picture) {
-          UI.$('#userAvatar').style.backgroundImage = `url(${state.user.picture})`;
-          UI.$('#userAvatar').style.backgroundSize = 'cover';
-          UI.$('#userAvatar').style.backgroundPosition = 'center';
-          UI.$('#userAvatar').textContent = '';
-        }
         
         // Add click handler to email
         UI.$('#userEmail').addEventListener('click', () => {
@@ -2085,7 +2039,7 @@
         if (!state.user) return;
         
         const lastLogin = new Date(state.user.loggedInAt).toLocaleString();
-        alert(`User Profile\n\nName: ${state.user.name}\nEmail: ${state.user.email}\nLast Login: ${lastLogin}\n\nGoogle ID: ${state.user.googleId || 'N/A'}`);
+        alert(`User Profile\n\nName: ${state.user.name}\nEmail: ${state.user.email}\nLast Login: ${lastLogin}`);
       },
       
       clearUser() {
@@ -2093,6 +2047,27 @@
         state.isAuthenticated = false;
         localStorage.removeItem(CONFIG.storageKeys.user);
         localStorage.removeItem(CONFIG.storageKeys.token);
+      },
+      
+      showDashboard() {
+        UI.$('#signinContainer').style.display = 'none';
+        UI.$('#mainContent').style.display = 'block';
+        UI.$('#sidebar').style.display = 'flex';
+        Navigation.init();
+      },
+      
+      showSignIn() {
+        UI.$('#signinContainer').style.display = 'block';
+        UI.$('#mainContent').style.display = 'none';
+        UI.$('#sidebar').style.display = 'none';
+      },
+      
+      logout() {
+        if (confirm('Are you sure you want to logout?')) {
+          this.clearUser();
+          // Redirect to home page
+          window.location.href = CONFIG.logoutRedirectUrl;
+        }
       }
     };
 
@@ -2177,29 +2152,6 @@
         UI.$$('.theme-btn').forEach(btn => {
           btn.classList.toggle('active', btn.dataset.theme === theme);
         });
-        
-        // Update Google button theme if needed
-        if (window.google && window.google.accounts) {
-          this.updateGoogleButtonTheme();
-        }
-      },
-      
-      updateGoogleButtonTheme() {
-        const googleBtn = UI.$('#googleSignInBtn');
-        if (googleBtn && googleBtn.firstChild) {
-          googleBtn.innerHTML = '';
-          window.google.accounts.id.renderButton(
-            googleBtn,
-            {
-              theme: state.theme === 'dark' ? 'filled_black' : 'outline',
-              size: 'large',
-              type: 'standard',
-              shape: 'pill',
-              text: 'signin_with',
-              logo_alignment: 'left'
-            }
-          );
-        }
       },
       
       setupEventListeners() {
@@ -2214,11 +2166,6 @@
     // ===== NAVIGATION MANAGER =====
     const Navigation = {
       init() {
-        if (!state.isAuthenticated) {
-          GoogleAuth.showSignIn();
-          return;
-        }
-        
         this.setupEventListeners();
         this.loadView('dashboard');
       },
@@ -2249,8 +2196,24 @@
         
         // Logout button
         UI.$('#logoutBtn').addEventListener('click', () => {
-          if (confirm('Are you sure you want to logout?')) {
-            GoogleAuth.logout();
+          UserManager.logout();
+        });
+        
+        // Sign in button
+        UI.$('#signinBtn').addEventListener('click', () => {
+          // Redirect to your Google OAuth URL
+          if (CONFIG.authRedirectUrl && CONFIG.authRedirectUrl !== 'YOUR_GOOGLE_AUTH_URL_HERE') {
+            window.location.href = CONFIG.authRedirectUrl;
+          } else {
+            // Demo login with the token from your URL
+            const demoUser = {
+              user_id: "688bd338-ff3d-455d-ae45-be6b9a421bb6",
+              email: "soojidano@gmail.com",
+              name: "Soo Ji Dano",
+              timestamp: "2026-01-09T11:54:59.130845"
+            };
+            UserManager.saveUser(demoUser);
+            UserManager.showDashboard();
           }
         });
         
@@ -2481,7 +2444,7 @@
                   <div class="kpi-trend trend-neutral">→</div>
                 </div>
                 <div class="kpi-content">
-                  <div class="kpi-value">${state.user?.email.split('@')[0] || 'User'}</div>
+                  <div class="kpi-value">${state.user?.name?.split(' ')[0] || state.user?.email.split('@')[0] || 'User'}</div>
                   <div class="kpi-label">Current User</div>
                   <div class="kpi-progress">
                     <div class="kpi-progress-bar" style="width: 100%"></div>
@@ -2594,7 +2557,7 @@
                   <div class="kpi-trend trend-neutral">→</div>
                 </div>
                 <div class="kpi-content">
-                  <div class="kpi-value">${state.user?.name || 'User'}</div>
+                  <div class="kpi-value">${state.user?.name || state.user?.email.split('@')[0] || 'User'}</div>
                   <div class="kpi-label">Logged in as</div>
                   <div class="kpi-progress">
                     <div class="kpi-progress-bar" style="width: 100%"></div>
@@ -2700,7 +2663,7 @@
                 <div class="stat-item">
                   <div class="stat-icon">👤</div>
                   <div class="stat-content">
-                    <div class="stat-value">${state.user?.email.split('@')[0] || 'User'}</div>
+                    <div class="stat-value">${state.user?.name?.split(' ')[0] || state.user?.email.split('@')[0] || 'User'}</div>
                     <div class="stat-label">Current User</div>
                   </div>
                 </div>
@@ -3204,15 +3167,8 @@
         // Initialize theme first
         ThemeManager.init();
         
-        // Wait for Google Identity Services to load
-        if (typeof google === 'undefined') {
-          console.error('Google Identity Services not loaded');
-          // Fallback: Check if we have stored user data
-          GoogleAuth.loadUserFromStorage();
-        } else {
-          // Initialize Google Auth
-          GoogleAuth.init();
-        }
+        // Initialize user management (checks URL token first)
+        UserManager.init();
         
         // Initialize Modal Manager
         ModalManager.init();
@@ -3240,22 +3196,12 @@
     };
 
     // ===== INITIALIZE =====
-    // Wait for Google Identity Services to load
-    if (typeof google !== 'undefined') {
-      document.addEventListener('DOMContentLoaded', () => App.init());
-    } else {
-      // Fallback if Google script doesn't load
-      document.addEventListener('DOMContentLoaded', () => {
-        console.warn('Google Identity Services not loaded, using fallback');
-        App.init();
-      });
-    }
+    document.addEventListener('DOMContentLoaded', () => App.init());
 
     // Global exports for debugging
     window.App = App;
     window.Navigation = Navigation;
     window.ApiService = ApiService;
-    window.GoogleAuth = GoogleAuth;
     window.UserManager = UserManager;
   </script>
 </body>
