@@ -14,6 +14,9 @@
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
   
+  <!-- Google Identity Services -->
+  <script src="https://accounts.google.com/gsi/client" async defer></script>
+  
   <style>
     /* ===== CSS VARIABLES & DESIGN SYSTEM ===== */
     :root {
@@ -431,6 +434,7 @@
       display: flex;
       align-items: center;
       gap: var(--space-3);
+      position: relative;
     }
 
     .user-avatar {
@@ -445,21 +449,64 @@
       font-weight: 600;
       font-size: var(--text-sm);
       box-shadow: var(--shadow-md);
+      flex-shrink: 0;
     }
 
     .user-info {
       flex: 1;
+      min-width: 0;
     }
 
     .user-name {
       font-size: var(--text-sm);
       font-weight: 600;
       color: var(--color-text-primary);
+      margin-bottom: 2px;
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
     }
 
     .user-email {
       font-size: var(--text-xs);
       color: var(--color-text-tertiary);
+      white-space: nowrap;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      cursor: pointer;
+      transition: color var(--transition-fast);
+    }
+
+    .user-email:hover {
+      color: var(--color-primary-500);
+    }
+
+    .user-actions {
+      display: flex;
+      gap: var(--space-2);
+      margin-left: auto;
+    }
+
+    .logout-btn {
+      width: 36px;
+      height: 36px;
+      border-radius: var(--radius-md);
+      border: 1px solid var(--color-border);
+      background: var(--color-bg-secondary);
+      color: var(--color-text-secondary);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      cursor: pointer;
+      transition: all var(--transition-fast);
+      flex-shrink: 0;
+    }
+
+    .logout-btn:hover {
+      background: var(--color-error-50);
+      border-color: var(--color-error-300);
+      color: var(--color-error-500);
+      transform: scale(1.05);
     }
 
     /* ===== MAIN CONTENT ===== */
@@ -1509,6 +1556,52 @@
       margin: 0 auto var(--space-6);
     }
 
+    /* ===== GOOGLE SIGN IN BUTTON ===== */
+    .google-signin-container {
+      position: fixed;
+      top: 50%;
+      left: 50%;
+      transform: translate(-50%, -50%);
+      text-align: center;
+      z-index: var(--z-modal);
+      background: var(--color-bg-elevated);
+      padding: var(--space-8);
+      border-radius: var(--radius-2xl);
+      box-shadow: var(--shadow-2xl);
+      border: 1px solid var(--color-border);
+      min-width: 350px;
+    }
+
+    .google-signin-icon {
+      width: 80px;
+      height: 80px;
+      border-radius: var(--radius-full);
+      background: linear-gradient(135deg, var(--color-primary-500), var(--color-primary-700));
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin: 0 auto var(--space-6);
+      color: white;
+      font-size: var(--text-2xl);
+      font-weight: 700;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .google-signin-title {
+      font-size: var(--text-2xl);
+      font-weight: 700;
+      margin-bottom: var(--space-2);
+    }
+
+    .google-signin-subtitle {
+      color: var(--color-text-secondary);
+      margin-bottom: var(--space-6);
+    }
+
+    #googleSignInBtn {
+      margin: 0 auto var(--space-4);
+    }
+
     /* ===== RESPONSIVE DESIGN ===== */
     @media (max-width: 768px) {
       .content-container {
@@ -1545,6 +1638,23 @@
 
       .header-actions {
         display: none;
+      }
+
+      .user-menu {
+        flex-wrap: wrap;
+      }
+
+      .user-actions {
+        margin-left: 0;
+        margin-top: var(--space-2);
+        width: 100%;
+        justify-content: flex-end;
+      }
+
+      .google-signin-container {
+        min-width: 90%;
+        padding: var(--space-6);
+        margin: 0 var(--space-4);
       }
     }
 
@@ -1643,10 +1753,19 @@
 
       <div class="sidebar-footer">
         <div class="user-menu"> 
-          <div class="user-avatar">PS</div>
+          <div class="user-avatar" id="userAvatar">U</div>
           <div class="user-info">
-            <div class="user-name">Product Admin</div>
-            <div class="user-email">admin@productsaas.com</div>
+            <div class="user-name" id="userName">Loading...</div>
+            <div class="user-email" id="userEmail">loading@example.com</div>
+          </div>
+          <div class="user-actions">
+            <button class="logout-btn" id="logoutBtn" aria-label="Logout" title="Logout">
+              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"></path>
+                <polyline points="16 17 21 12 16 7"></polyline>
+                <line x1="21" y1="12" x2="9" y2="12"></line>
+              </svg>
+            </button>
           </div>
         </div>
       </div>
@@ -1674,32 +1793,47 @@
         </div>
 
         <!-- Theme Switcher -->
-          <div class="theme-switcher">
-            <button class="theme-btn active" data-theme="dark" aria-label="Dark theme">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
-              </svg>
-            </button>
-            <button class="theme-btn" data-theme="light" aria-label="Light theme">
-              <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-                <circle cx="12" cy="12" r="5"></circle>
-                <line x1="12" y1="1" x2="12" y2="3"></line>
-                <line x1="12" y1="21" x2="12" y2="23"></line>
-                <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
-                <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
-                <line x1="1" y1="12" x2="3" y2="12"></line>
-                <line x1="21" y1="12" x2="23" y2="12"></line>
-                <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
-                <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
-              </svg>
-            </button>
-          </div>
+        <div class="theme-switcher">
+          <button class="theme-btn active" data-theme="dark" aria-label="Dark theme">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"></path>
+            </svg>
+          </button>
+          <button class="theme-btn" data-theme="light" aria-label="Light theme">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <circle cx="12" cy="12" r="5"></circle>
+              <line x1="12" y1="1" x2="12" y2="3"></line>
+              <line x1="12" y1="21" x2="12" y2="23"></line>
+              <line x1="4.22" y1="4.22" x2="5.64" y2="5.64"></line>
+              <line x1="18.36" y1="18.36" x2="19.78" y2="19.78"></line>
+              <line x1="1" y1="12" x2="3" y2="12"></line>
+              <line x1="21" y1="12" x2="23" y2="12"></line>
+              <line x1="4.22" y1="19.78" x2="5.64" y2="18.36"></line>
+              <line x1="18.36" y1="5.64" x2="19.78" y2="4.22"></line>
+            </svg>
+          </button>
+        </div>
       </div>
+
       <!-- Content Container -->
       <div class="content-container" id="contentContainer">
         <!-- Content will be dynamically loaded here -->
       </div>
     </main>
+  </div>
+
+  <!-- Google Sign-in Container (Shown when not logged in) -->
+  <div class="google-signin-container" id="googleSignInContainer">
+    <div class="google-signin-icon">PS</div>
+    <h2 class="google-signin-title">ProductSaaS Dashboard</h2>
+    <p class="google-signin-subtitle">Sign in with Google to access your dashboard</p>
+    
+    <!-- Google Sign In Button -->
+    <div id="googleSignInBtn"></div>
+    
+    <p style="margin-top: var(--space-4); color: var(--color-text-tertiary); font-size: var(--text-sm);">
+      Sign in to manage your microservices e-commerce platform
+    </p>
   </div>
 
   <!-- Create Product Modal -->
@@ -1773,7 +1907,13 @@
         database: 'https://vitrixlabph.pythonanywhere.com/health'
       },
       refreshInterval: 30000,
-      skeletonDelay: 1000
+      skeletonDelay: 1000,
+      googleClientId: 'YOUR_GOOGLE_CLIENT_ID.apps.googleusercontent.com', // Replace with your actual Google Client ID
+      logoutRedirectUrl: 'https://vitrixlab.github.io/SaaS-EcomMVP-UI-UX/home-v2.html',
+      storageKeys: {
+        user: 'productsaas_user',
+        token: 'productsaas_token'
+      }
     };
 
     // ===== STATE MANAGEMENT =====
@@ -1785,6 +1925,174 @@
       serviceHealth: {
         products: 'unknown',
         database: 'unknown'
+      },
+      user: null,
+      googleAuth: null,
+      isAuthenticated: false
+    };
+
+    // ===== GOOGLE AUTH INTEGRATION =====
+    const GoogleAuth = {
+      init() {
+        this.initializeGoogleSignIn();
+        this.loadUserFromStorage();
+      },
+      
+      initializeGoogleSignIn() {
+        // Initialize Google Identity Services
+        window.google.accounts.id.initialize({
+          client_id: CONFIG.googleClientId,
+          callback: this.handleCredentialResponse.bind(this),
+          auto_select: false,
+          cancel_on_tap_outside: true
+        });
+        
+        // Render Google Sign In button
+        window.google.accounts.id.renderButton(
+          document.getElementById('googleSignInBtn'),
+          {
+            theme: state.theme === 'dark' ? 'filled_black' : 'outline',
+            size: 'large',
+            type: 'standard',
+            shape: 'pill',
+            text: 'signin_with',
+            logo_alignment: 'left'
+          }
+        );
+        
+        // Also show the One Tap dialog
+        window.google.accounts.id.prompt();
+      },
+      
+      handleCredentialResponse(response) {
+        console.log('Google Auth Response:', response);
+        
+        // Decode the JWT token to get user info
+        const payload = JSON.parse(atob(response.credential.split('.')[1]));
+        
+        // Store the user information
+        UserManager.saveUser({
+          email: payload.email,
+          name: payload.name || payload.email.split('@')[0],
+          picture: payload.picture,
+          googleId: payload.sub,
+          token: response.credential
+        });
+        
+        // Hide sign-in container and show dashboard
+        this.hideSignIn();
+        
+        // Initialize dashboard
+        Navigation.init();
+      },
+      
+      loadUserFromStorage() {
+        const userData = localStorage.getItem(CONFIG.storageKeys.user);
+        if (userData) {
+          try {
+            const user = JSON.parse(userData);
+            UserManager.saveUser(user, false); // Don't show toast on load
+            this.hideSignIn();
+            Navigation.init();
+          } catch (error) {
+            console.error('Failed to parse user data:', error);
+            UserManager.clearUser();
+          }
+        }
+      },
+      
+      showSignIn() {
+        UI.$('#googleSignInContainer').style.display = 'block';
+        UI.$('#mainContent').style.display = 'none';
+        UI.$('#sidebar').style.display = 'none';
+      },
+      
+      hideSignIn() {
+        UI.$('#googleSignInContainer').style.display = 'none';
+        UI.$('#mainContent').style.display = 'block';
+        UI.$('#sidebar').style.display = 'flex';
+      },
+      
+      logout() {
+        // Clear Google session
+        if (window.google && window.google.accounts) {
+          window.google.accounts.id.disableAutoSelect();
+          window.google.accounts.id.revoke(state.user?.email, (done) => {
+            console.log('Google session revoked');
+          });
+        }
+        
+        // Clear local storage
+        UserManager.clearUser();
+        
+        // Redirect to home page
+        window.location.href = CONFIG.logoutRedirectUrl;
+      }
+    };
+
+    // ===== USER MANAGEMENT =====
+    const UserManager = {
+      saveUser(userData, showToast = true) {
+        state.user = {
+          ...userData,
+          loggedInAt: new Date().toISOString(),
+          avatarText: this.getAvatarText(userData.email, userData.name)
+        };
+        
+        localStorage.setItem(CONFIG.storageKeys.user, JSON.stringify(state.user));
+        if (userData.token) {
+          localStorage.setItem(CONFIG.storageKeys.token, userData.token);
+        }
+        
+        state.isAuthenticated = true;
+        this.updateUserUI();
+        
+        if (showToast) {
+          UI.showToast(`Welcome, ${state.user.name}!`, 'success', 'Login Successful');
+        }
+      },
+      
+      getAvatarText(email, name) {
+        if (name && name.length >= 2) {
+          return name.substring(0, 2).toUpperCase();
+        }
+        return email.substring(0, 2).toUpperCase();
+      },
+      
+      updateUserUI() {
+        if (!state.user) return;
+        
+        // Update sidebar user info
+        UI.$('#userAvatar').textContent = state.user.avatarText;
+        UI.$('#userName').textContent = state.user.name;
+        UI.$('#userEmail').textContent = state.user.email;
+        
+        // Update avatar if we have a picture
+        if (state.user.picture) {
+          UI.$('#userAvatar').style.backgroundImage = `url(${state.user.picture})`;
+          UI.$('#userAvatar').style.backgroundSize = 'cover';
+          UI.$('#userAvatar').style.backgroundPosition = 'center';
+          UI.$('#userAvatar').textContent = '';
+        }
+        
+        // Add click handler to email
+        UI.$('#userEmail').addEventListener('click', () => {
+          this.showUserProfile();
+        });
+      },
+      
+      showUserProfile() {
+        if (!state.user) return;
+        
+        const lastLogin = new Date(state.user.loggedInAt).toLocaleString();
+        alert(`User Profile\n\nName: ${state.user.name}\nEmail: ${state.user.email}\nLast Login: ${lastLogin}\n\nGoogle ID: ${state.user.googleId || 'N/A'}`);
+      },
+      
+      clearUser() {
+        state.user = null;
+        state.isAuthenticated = false;
+        localStorage.removeItem(CONFIG.storageKeys.user);
+        localStorage.removeItem(CONFIG.storageKeys.token);
       }
     };
 
@@ -1869,6 +2177,29 @@
         UI.$$('.theme-btn').forEach(btn => {
           btn.classList.toggle('active', btn.dataset.theme === theme);
         });
+        
+        // Update Google button theme if needed
+        if (window.google && window.google.accounts) {
+          this.updateGoogleButtonTheme();
+        }
+      },
+      
+      updateGoogleButtonTheme() {
+        const googleBtn = UI.$('#googleSignInBtn');
+        if (googleBtn && googleBtn.firstChild) {
+          googleBtn.innerHTML = '';
+          window.google.accounts.id.renderButton(
+            googleBtn,
+            {
+              theme: state.theme === 'dark' ? 'filled_black' : 'outline',
+              size: 'large',
+              type: 'standard',
+              shape: 'pill',
+              text: 'signin_with',
+              logo_alignment: 'left'
+            }
+          );
+        }
       },
       
       setupEventListeners() {
@@ -1883,6 +2214,11 @@
     // ===== NAVIGATION MANAGER =====
     const Navigation = {
       init() {
+        if (!state.isAuthenticated) {
+          GoogleAuth.showSignIn();
+          return;
+        }
+        
         this.setupEventListeners();
         this.loadView('dashboard');
       },
@@ -1909,6 +2245,13 @@
         
         UI.$('#mobileOverlay').addEventListener('click', () => {
           UI.closeSidebar();
+        });
+        
+        // Logout button
+        UI.$('#logoutBtn').addEventListener('click', () => {
+          if (confirm('Are you sure you want to logout?')) {
+            GoogleAuth.logout();
+          }
         });
         
         // Close sidebar on resize to desktop
@@ -1940,6 +2283,8 @@
       },
       
       async loadView(view) {
+        if (!state.isAuthenticated) return;
+        
         state.currentView = view;
         
         // Show loading skeleton
@@ -2108,7 +2453,7 @@
           <div class="view-content">
             <div class="page-header">
               <h1 class="page-title">Dashboard Overview</h1>
-              <p class="page-description">Monitor your microservices architecture in real-time</p>
+              <p class="page-description">Welcome back, ${state.user?.name}! Monitor your microservices architecture in real-time</p>
             </div>
             
             <div class="kpi-grid">
@@ -2132,18 +2477,18 @@
               
               <div class="kpi-card">
                 <div class="kpi-header">
-                  <div class="kpi-icon">⚡</div>
+                  <div class="kpi-icon">👤</div>
                   <div class="kpi-trend trend-neutral">→</div>
                 </div>
                 <div class="kpi-content">
-                  <div class="kpi-value">${state.products.length}</div>
-                  <div class="kpi-label">Cache Performance</div>
+                  <div class="kpi-value">${state.user?.email.split('@')[0] || 'User'}</div>
+                  <div class="kpi-label">Current User</div>
                   <div class="kpi-progress">
-                    <div class="kpi-progress-bar" style="width: 85%"></div>
+                    <div class="kpi-progress-bar" style="width: 100%"></div>
                   </div>
                   <div class="kpi-footer">
-                    <span>Products in memory cache</span>
-                    <span>85%</span>
+                    <span>${state.user?.email || 'Not logged in'}</span>
+                    <span>Active</span>
                   </div>
                 </div>
               </div>
@@ -2245,18 +2590,18 @@
               
               <div class="kpi-card">
                 <div class="kpi-header">
-                  <div class="kpi-icon">⚡</div>
+                  <div class="kpi-icon">👤</div>
                   <div class="kpi-trend trend-neutral">→</div>
                 </div>
                 <div class="kpi-content">
-                  <div class="kpi-value">${state.products.length}</div>
-                  <div class="kpi-label">In Memory Cache</div>
+                  <div class="kpi-value">${state.user?.name || 'User'}</div>
+                  <div class="kpi-label">Logged in as</div>
                   <div class="kpi-progress">
-                    <div class="kpi-progress-bar" style="width: ${Math.min(state.products.length * 20, 100)}%"></div>
+                    <div class="kpi-progress-bar" style="width: 100%"></div>
                   </div>
                   <div class="kpi-footer">
-                    <span>Fast access cache</span>
-                    <span>${Math.min(state.products.length * 20, 100)}%</span>
+                    <span>${state.user?.email || 'Not logged in'}</span>
+                    <span>Active</span>
                   </div>
                 </div>
               </div>
@@ -2353,10 +2698,10 @@
                   </div>
                 </div>
                 <div class="stat-item">
-                  <div class="stat-icon">🚀</div>
+                  <div class="stat-icon">👤</div>
                   <div class="stat-content">
-                    <div class="stat-value">99.9%</div>
-                    <div class="stat-label">Service Availability</div>
+                    <div class="stat-value">${state.user?.email.split('@')[0] || 'User'}</div>
+                    <div class="stat-label">Current User</div>
                   </div>
                 </div>
               </div>
@@ -2446,10 +2791,22 @@
               </div>
               <div class="settings-group">
                 <label class="settings-label">Default Theme</label>
-                <select class="settings-control">
+                <select class="settings-control" id="themeSelect">
                   <option value="dark" ${state.theme === 'dark' ? 'selected' : ''}>Dark</option>
                   <option value="light" ${state.theme === 'light' ? 'selected' : ''}>Light</option>
                 </select>
+              </div>
+            </div>
+            
+            <div class="settings-section">
+              <h3 class="settings-section-title">User Settings</h3>
+              <div class="settings-group">
+                <label class="settings-label">Current User</label>
+                <input type="text" class="settings-control" value="${state.user?.email || 'Not logged in'}" disabled>
+              </div>
+              <div class="settings-group">
+                <label class="settings-label">User Role</label>
+                <input type="text" class="settings-control" value="${state.user?.role || 'Admin'}" disabled>
               </div>
             </div>
             
@@ -2581,10 +2938,22 @@
         
         // Setup settings events
         if (view === 'settings') {
-          const themeSelect = UI.$('.settings-control[type="select"]');
+          const themeSelect = UI.$('#themeSelect');
           if (themeSelect) {
             themeSelect.addEventListener('change', (e) => {
               ThemeManager.setTheme(e.target.value);
+            });
+          }
+          
+          const clearCacheBtn = UI.$('#clearCacheBtn');
+          if (clearCacheBtn) {
+            clearCacheBtn.addEventListener('click', () => {
+              if (confirm('Clear all cached data?')) {
+                localStorage.removeItem('theme');
+                localStorage.removeItem(CONFIG.storageKeys.user);
+                localStorage.removeItem(CONFIG.storageKeys.token);
+                location.reload();
+              }
             });
           }
         }
@@ -2757,27 +3126,29 @@
       },
       
       setupEventListeners() {
-        // Form submission
+        // Product form submission
         UI.$('#productForm').addEventListener('submit', async (e) => {
           e.preventDefault();
           await this.handleSubmit();
         });
         
         // Close modal buttons
-        UI.$('#closeModalBtn').addEventListener('click', () => this.close());
-        UI.$('#cancelBtn').addEventListener('click', () => this.close());
+        UI.$('#closeModalBtn').addEventListener('click', () => this.closeProductModal());
+        UI.$('#cancelBtn').addEventListener('click', () => this.closeProductModal());
         
         // Close on overlay click
         UI.$('#createProductModal').addEventListener('click', (e) => {
-          if (e.target === e.currentTarget) this.close();
+          if (e.target === e.currentTarget) this.closeProductModal();
         });
         
         // Keyboard shortcuts
         document.addEventListener('keydown', (e) => {
-          if (e.key === 'Escape' && UI.$('#createProductModal').classList.contains('open')) {
-            this.close();
+          if (e.key === 'Escape') {
+            if (UI.$('#createProductModal').classList.contains('open')) {
+              this.closeProductModal();
+            }
           }
-          if ((e.ctrlKey || e.metaKey) && e.key === 'n') {
+          if ((e.ctrlKey || e.metaKey) && e.key === 'n' && state.isAuthenticated) {
             e.preventDefault();
             this.open();
           }
@@ -2789,7 +3160,7 @@
         UI.$('#productName').focus();
       },
       
-      close() {
+      closeProductModal() {
         UI.$('#createProductModal').classList.remove('open');
         UI.$('#productForm').reset();
       },
@@ -2817,7 +3188,7 @@
         
         try {
           await ApiService.createProduct(productData);
-          this.close();
+          this.closeProductModal();
           await Navigation.refreshProducts();
         } catch (error) {
           // Error handled by ApiService
@@ -2830,18 +3201,30 @@
       async init() {
         console.log('🚀 Initializing ProductSaaS Dashboard...');
         
-        // Initialize managers
+        // Initialize theme first
         ThemeManager.init();
-        Navigation.init();
+        
+        // Wait for Google Identity Services to load
+        if (typeof google === 'undefined') {
+          console.error('Google Identity Services not loaded');
+          // Fallback: Check if we have stored user data
+          GoogleAuth.loadUserFromStorage();
+        } else {
+          // Initialize Google Auth
+          GoogleAuth.init();
+        }
+        
+        // Initialize Modal Manager
         ModalManager.init();
         
         // Setup refresh button
         UI.$('#refreshBtn').addEventListener('click', async () => {
+          if (!state.isAuthenticated) return;
           UI.showToast('Refreshing data...', 'info', 'Refreshing');
           await Navigation.refreshProducts();
         });
         
-        // Start auto-refresh
+        // Start auto-refresh if authenticated
         this.startAutoRefresh();
         
         console.log('✅ Dashboard initialized successfully');
@@ -2849,7 +3232,7 @@
       
       startAutoRefresh() {
         setInterval(async () => {
-          if (!state.isLoading && document.visibilityState === 'visible') {
+          if (state.isAuthenticated && !state.isLoading && document.visibilityState === 'visible') {
             await Navigation.refreshProducts();
           }
         }, CONFIG.refreshInterval);
@@ -2857,12 +3240,23 @@
     };
 
     // ===== INITIALIZE =====
-    document.addEventListener('DOMContentLoaded', () => App.init());
+    // Wait for Google Identity Services to load
+    if (typeof google !== 'undefined') {
+      document.addEventListener('DOMContentLoaded', () => App.init());
+    } else {
+      // Fallback if Google script doesn't load
+      document.addEventListener('DOMContentLoaded', () => {
+        console.warn('Google Identity Services not loaded, using fallback');
+        App.init();
+      });
+    }
 
     // Global exports for debugging
     window.App = App;
     window.Navigation = Navigation;
     window.ApiService = ApiService;
+    window.GoogleAuth = GoogleAuth;
+    window.UserManager = UserManager;
   </script>
 </body>
 </html>
