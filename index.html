@@ -2941,7 +2941,8 @@
           }
         }
       },
-      
+
+      /*
       async refreshProducts() {
         UI.showLoading();
         try {
@@ -2955,7 +2956,30 @@
           UI.hideLoading();
         }
       },
+      */
       
+      async refreshProducts() {
+      UI.showLoading();
+      try {
+        // 🔄 Trigger backend cache sync (equivalent to curl -X POST ...)
+        await fetch(
+          'https://saas-ecommvp-v1-api-products-service.onrender.com/cache/sync',
+          { method: 'POST' }
+        );
+    
+        // 📦 Fetch refreshed products after sync
+        const products = await ApiService.getProducts();
+        state.products = products;
+        UI.$('#productsBadge').textContent = products.length;
+        this.renderView(state.currentView);
+    
+      } catch (error) {
+        console.error('Failed to refresh products:', error);
+      } finally {
+        UI.hideLoading();
+      }
+    },
+
       exportData() {
         const dataStr = JSON.stringify(state.products, null, 2);
         const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
