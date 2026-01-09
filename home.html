@@ -1,0 +1,928 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TrendFlow | Global Product Intelligence</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        :root {
+            --primary: #2563eb;
+            --primary-dark: #1d4ed8;
+            --secondary: #0f172a;
+            --accent: #06b6d4;
+            --light: #f8fafc;
+            --gray: #64748b;
+            --success: #10b981;
+            --warning: #f59e0b;
+            --danger: #ef4444;
+            --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+            --radius: 8px;
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+        }
+        
+        body {
+            line-height: 1.6;
+            color: var(--secondary);
+            background-color: var(--light);
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Header */
+        header {
+            padding: 20px 0;
+            background-color: white;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            position: sticky;
+            top: 0;
+            z-index: 100;
+        }
+        
+        .header-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .logo {
+            font-size: 24px;
+            font-weight: 800;
+            color: var(--primary);
+            display: flex;
+            align-items: center;
+        }
+        
+        .logo i {
+            margin-right: 8px;
+            color: var(--accent);
+        }
+        
+        nav ul {
+            display: flex;
+            list-style: none;
+            gap: 30px;
+        }
+        
+        nav a {
+            text-decoration: none;
+            color: var(--secondary);
+            font-weight: 500;
+            transition: color 0.3s;
+        }
+        
+        nav a:hover {
+            color: var(--primary);
+        }
+        
+        .header-cta {
+            background-color: var(--primary);
+            color: white;
+            padding: 10px 20px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            text-decoration: none;
+            transition: background-color 0.3s;
+        }
+        
+        .header-cta:hover {
+            background-color: var(--primary-dark);
+        }
+        
+        /* Hero Section */
+        .hero {
+            padding: 100px 0;
+            background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+            text-align: center;
+        }
+        
+        .hero h1 {
+            font-size: 3.5rem;
+            font-weight: 800;
+            line-height: 1.1;
+            margin-bottom: 20px;
+            max-width: 800px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+        
+        .hero p {
+            font-size: 1.25rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto 40px;
+        }
+        
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            margin-top: 30px;
+        }
+        
+        .btn-primary {
+            background-color: var(--primary);
+            color: white;
+            padding: 15px 30px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: none;
+            font-size: 1rem;
+            cursor: pointer;
+            box-shadow: var(--shadow);
+        }
+        
+        .btn-primary:hover {
+            background-color: var(--primary-dark);
+            transform: translateY(-2px);
+        }
+        
+        .btn-secondary {
+            background-color: white;
+            color: var(--primary);
+            padding: 15px 30px;
+            border-radius: var(--radius);
+            font-weight: 600;
+            text-decoration: none;
+            transition: all 0.3s;
+            border: 2px solid var(--primary);
+            font-size: 1rem;
+            cursor: pointer;
+        }
+        
+        .btn-secondary:hover {
+            background-color: #f1f5f9;
+            transform: translateY(-2px);
+        }
+        
+        /* Section Common Styles */
+        section {
+            padding: 100px 0;
+        }
+        
+        .section-title {
+            font-size: 2.5rem;
+            font-weight: 700;
+            margin-bottom: 20px;
+            text-align: center;
+        }
+        
+        .section-subtitle {
+            font-size: 1.25rem;
+            color: var(--gray);
+            max-width: 700px;
+            margin: 0 auto 60px;
+            text-align: center;
+        }
+        
+        /* Problem Section */
+        .problem-section {
+            background-color: white;
+        }
+        
+        .pain-points {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 40px;
+        }
+        
+        .pain-point {
+            background-color: #f8fafc;
+            padding: 30px;
+            border-radius: var(--radius);
+            border-left: 4px solid var(--danger);
+        }
+        
+        .pain-point i {
+            color: var(--danger);
+            font-size: 24px;
+            margin-bottom: 15px;
+        }
+        
+        /* Core Insight Section */
+        .core-insight {
+            background: linear-gradient(135deg, #fefce8 0%, #fef3c7 100%);
+        }
+        
+        .insight-container {
+            max-width: 800px;
+            margin: 0 auto;
+            background-color: white;
+            padding: 50px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+        
+        .insight-steps {
+            display: flex;
+            justify-content: space-between;
+            margin: 40px 0;
+            position: relative;
+        }
+        
+        .insight-steps:before {
+            content: '';
+            position: absolute;
+            top: 30px;
+            left: 10%;
+            right: 10%;
+            height: 2px;
+            background-color: var(--primary);
+            z-index: 1;
+        }
+        
+        .step {
+            text-align: center;
+            z-index: 2;
+            background-color: white;
+            padding: 10px;
+            flex: 1;
+        }
+        
+        .step-circle {
+            width: 60px;
+            height: 60px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin: 0 auto 15px;
+        }
+        
+        /* How It Works */
+        .how-it-works {
+            background-color: white;
+        }
+        
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .step-card {
+            background-color: #f8fafc;
+            padding: 40px 30px;
+            border-radius: var(--radius);
+            text-align: center;
+            transition: transform 0.3s;
+            border-top: 4px solid var(--primary);
+        }
+        
+        .step-card:hover {
+            transform: translateY(-10px);
+        }
+        
+        .step-number {
+            display: inline-block;
+            width: 40px;
+            height: 40px;
+            background-color: var(--primary);
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-weight: 700;
+            margin-bottom: 20px;
+        }
+        
+        /* Dashboard Promise */
+        .dashboard-section {
+            background-color: #f8fafc;
+        }
+        
+        .dashboard-modules {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .module {
+            background-color: white;
+            padding: 30px;
+            border-radius: var(--radius);
+            box-shadow: var(--shadow);
+        }
+        
+        .module-icon {
+            font-size: 32px;
+            margin-bottom: 20px;
+            color: var(--primary);
+        }
+        
+        /* Network Effect */
+        .network-section {
+            background-color: white;
+        }
+        
+        .network-content {
+            max-width: 800px;
+            margin: 0 auto;
+            text-align: center;
+        }
+        
+        /* Target Audience */
+        .audience-section {
+            background-color: #f0f9ff;
+        }
+        
+        .audience-profiles {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 30px;
+            margin-top: 50px;
+        }
+        
+        .profile {
+            background-color: white;
+            padding: 40px 30px;
+            border-radius: var(--radius);
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+        
+        /* Differentiation */
+        .differentiation-section {
+            background-color: white;
+        }
+        
+        .comparison {
+            max-width: 800px;
+            margin: 50px auto 0;
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+        }
+        
+        .do, .dont {
+            padding: 30px;
+            border-radius: var(--radius);
+        }
+        
+        .dont {
+            background-color: #fef2f2;
+            border-left: 4px solid var(--danger);
+        }
+        
+        .do {
+            background-color: #f0fdf4;
+            border-left: 4px solid var(--success);
+        }
+        
+        .dont-title, .do-title {
+            font-weight: 700;
+            margin-bottom: 20px;
+            font-size: 1.5rem;
+        }
+        
+        .dont-title {
+            color: var(--danger);
+        }
+        
+        .do-title {
+            color: var(--success);
+        }
+        
+        /* Vision Section */
+        .vision-section {
+            background: linear-gradient(135deg, #e0e7ff 0%, #c7d2fe 100%);
+            text-align: center;
+        }
+        
+        /* Final CTA */
+        .final-cta {
+            background-color: var(--secondary);
+            color: white;
+            text-align: center;
+            padding: 100px 0;
+        }
+        
+        .final-cta h2 {
+            color: white;
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+        
+        .final-cta p {
+            max-width: 600px;
+            margin: 0 auto 40px;
+            color: #cbd5e1;
+        }
+        
+        .trust-note {
+            margin-top: 30px;
+            font-size: 0.9rem;
+            color: #94a3b8;
+            font-style: italic;
+        }
+        
+        /* Footer */
+        footer {
+            background-color: #0f172a;
+            color: white;
+            padding: 60px 0 30px;
+        }
+        
+        .footer-content {
+            display: grid;
+            grid-template-columns: 2fr 1fr 1fr 1fr;
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+        
+        .footer-logo {
+            font-size: 24px;
+            font-weight: 800;
+            margin-bottom: 20px;
+            color: white;
+        }
+        
+        .footer-column h3 {
+            margin-bottom: 20px;
+            font-size: 1.2rem;
+        }
+        
+        .footer-column ul {
+            list-style: none;
+        }
+        
+        .footer-column ul li {
+            margin-bottom: 10px;
+        }
+        
+        .footer-column a {
+            color: #cbd5e1;
+            text-decoration: none;
+            transition: color 0.3s;
+        }
+        
+        .footer-column a:hover {
+            color: white;
+        }
+        
+        .copyright {
+            text-align: center;
+            padding-top: 30px;
+            border-top: 1px solid #334155;
+            color: #94a3b8;
+            font-size: 0.9rem;
+        }
+        
+        /* Mobile Responsiveness */
+        @media (max-width: 992px) {
+            .steps-container,
+            .dashboard-modules,
+            .audience-profiles {
+                grid-template-columns: 1fr;
+            }
+            
+            .footer-content {
+                grid-template-columns: 1fr 1fr;
+            }
+            
+            .hero h1 {
+                font-size: 2.5rem;
+            }
+        }
+        
+        @media (max-width: 768px) {
+            .header-content {
+                flex-direction: column;
+                gap: 20px;
+            }
+            
+            nav ul {
+                gap: 15px;
+                flex-wrap: wrap;
+                justify-content: center;
+            }
+            
+            .hero h1 {
+                font-size: 2rem;
+            }
+            
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+            
+            .comparison {
+                grid-template-columns: 1fr;
+            }
+            
+            .insight-steps {
+                flex-direction: column;
+                gap: 40px;
+            }
+            
+            .insight-steps:before {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <!-- Header -->
+    <header>
+        <div class="container header-content">
+            <div class="logo">
+                <i class="fas fa-chart-network"></i>
+                TrendFlow
+            </div>
+            <nav>
+                <ul>
+                    <li><a href="#problem">Problem</a></li>
+                    <li><a href="#insight">Insight</a></li>
+                    <li><a href="#how-it-works">How It Works</a></li>
+                    <li><a href="#dashboard">Dashboard</a></li>
+                    <li><a href="#network">Network</a></li>
+                </ul>
+            </nav>
+            <a href="#final-cta" class="header-cta">Connect Your Store</a>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero">
+        <div class="container">
+            <h1>See which products will win — before the market is saturated</h1>
+            <p>We analyze how products spread across global e-commerce stores, regions, and seasons to reveal emerging, rising, and declining trends in real time.</p>
+            <div class="cta-buttons">
+                <a href="#final-cta" class="btn-primary">Connect Your Store</a>
+                <a href="#dashboard" class="btn-secondary">View Live Trends</a>
+            </div>
+        </div>
+    </section>
+
+    <!-- Problem Section -->
+    <section id="problem" class="problem-section">
+        <div class="container">
+            <h2 class="section-title">The Market Moves Faster Than Sales Data</h2>
+            <p class="section-subtitle">Traditional analytics look backward. We look forward.</p>
+            
+            <div class="pain-points">
+                <div class="pain-point">
+                    <i class="fas fa-clock"></i>
+                    <h3>Late to the Trend</h3>
+                    <p>Sales data appears after a trend is already crowded, leaving you competing on price.</p>
+                </div>
+                <div class="pain-point">
+                    <i class="fas fa-globe-americas"></i>
+                    <h3>Geo-Blind Spots</h3>
+                    <p>What works in one country fails in another without understanding regional diffusion.</p>
+                </div>
+                <div class="pain-point">
+                    <i class="fas fa-calendar-alt"></i>
+                    <h3>Seasonality Misses</h3>
+                    <p>Seasonality is hard to predict, easy to miss, and costly when wrong.</p>
+                </div>
+                <div class="pain-point">
+                    <i class="fas fa-copy"></i>
+                    <h3>Blind Copying</h3>
+                    <p>Sellers copy blindly — and enter too late, missing the profit window entirely.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Core Insight -->
+    <section id="insight" class="core-insight">
+        <div class="container">
+            <h2 class="section-title">Trends Start With Listings, Not Sales</h2>
+            <p class="section-subtitle">Our fundamental insight that changes everything</p>
+            
+            <div class="insight-container">
+                <p>Every product trend follows a predictable pattern that starts long before sales spike:</p>
+                
+                <div class="insight-steps">
+                    <div class="step">
+                        <div class="step-circle">1</div>
+                        <h3>First Listings</h3>
+                        <p>Someone lists it first</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-circle">2</div>
+                        <h3>Copy Phase</h3>
+                        <p>Others copy it</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-circle">3</div>
+                        <h3>Geo Spread</h3>
+                        <p>It spreads to new regions</p>
+                    </div>
+                    <div class="step">
+                        <div class="step-circle">4</div>
+                        <h3>Peak & Decline</h3>
+                        <p>It peaks, saturates, and declines</p>
+                    </div>
+                </div>
+                
+                <p>We track this <strong>globally</strong>, using real product listings from connected stores to map the entire lifecycle before sales data confirms it.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section id="how-it-works" class="how-it-works">
+        <div class="container">
+            <h2 class="section-title">How It Works — The Intelligence Loop</h2>
+            <p class="section-subtitle">Three simple steps to transform your product strategy</p>
+            
+            <div class="steps-container">
+                <div class="step-card">
+                    <div class="step-number">1</div>
+                    <h3>Connect Your Store</h3>
+                    <p>Securely link your e-commerce store to contribute anonymized product data to the network.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">2</div>
+                    <h3>Global Intelligence Engine</h3>
+                    <p>We aggregate millions of listings to detect product similarity, geo spread, velocity, and seasonality.</p>
+                </div>
+                <div class="step-card">
+                    <div class="step-number">3</div>
+                    <h3>Actionable Trend Signals</h3>
+                    <p>You see what's emerging, where it's growing, when it peaks, and when to avoid saturated markets.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Dashboard Promise -->
+    <section id="dashboard" class="dashboard-section">
+        <div class="container">
+            <h2 class="section-title">Your Product Radar</h2>
+            <p class="section-subtitle">The dashboard that becomes your competitive advantage</p>
+            
+            <div class="dashboard-modules">
+                <div class="module">
+                    <div class="module-icon">🌍</div>
+                    <h3>Global Trend Map</h3>
+                    <p>Visualize where products appear first and track their geographic spread across continents and countries.</p>
+                    <p><em>Future Dashboard Module: Interactive world map with diffusion heatmaps</em></p>
+                </div>
+                <div class="module">
+                    <div class="module-icon">📈</div>
+                    <h3>Trend Lifecycle Tracker</h3>
+                    <p>Monitor products through incubation → expansion → saturation → decline phases with clear stage indicators.</p>
+                    <p><em>Future Dashboard Module: Timeline visualization with phase alerts</em></p>
+                </div>
+                <div class="module">
+                    <div class="module-icon">🕒</div>
+                    <h3>Seasonality Signals</h3>
+                    <p>See when a product historically rises and falls by region, with predictive seasonality curves.</p>
+                    <p><em>Future Dashboard Module: Temporal analytics with forecasting</em></p>
+                </div>
+                <div class="module">
+                    <div class="module-icon">🔔</div>
+                    <h3>Early Alerts</h3>
+                    <p>Get notified about emerging trends before saturation hits your market or region.</p>
+                    <p><em>Future Dashboard Module: Custom alert engine with signal strength indicators</em></p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Network Effect -->
+    <section id="network" class="network-section">
+        <div class="container">
+            <h2 class="section-title">Powered by Real Sellers, Not Guesswork</h2>
+            <p class="section-subtitle">The network effect that makes our intelligence smarter every day</p>
+            
+            <div class="network-content">
+                <p>Every connected store improves the entire system:</p>
+                
+                <div style="display: flex; justify-content: center; margin: 40px 0;">
+                    <div style="text-align: center; margin: 0 20px;">
+                        <div style="font-size: 2rem; color: var(--primary); font-weight: 700;">✓</div>
+                        <p>More regions covered</p>
+                    </div>
+                    <div style="text-align: center; margin: 0 20px;">
+                        <div style="font-size: 2rem; color: var(--primary); font-weight: 700;">✓</div>
+                        <p>Cleaner signals</p>
+                    </div>
+                    <div style="text-align: center; margin: 0 20px;">
+                        <div style="font-size: 2rem; color: var(--primary); font-weight: 700;">✓</div>
+                        <p>Earlier detection</p>
+                    </div>
+                    <div style="text-align: center; margin: 0 20px;">
+                        <div style="font-size: 2rem; color: var(--primary); font-weight: 700;">✓</div>
+                        <p>Better seasonality accuracy</p>
+                    </div>
+                </div>
+                
+                <p>Your data is <strong>aggregated</strong>, <strong>anonymized</strong>, and used for pattern detection — never exposed to competitors.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- Target Audience -->
+    <section class="audience-section">
+        <div class="container">
+            <h2 class="section-title">Built for Sellers Who Think Ahead</h2>
+            <p class="section-subtitle">Focused on the sellers who need this most</p>
+            
+            <div class="audience-profiles">
+                <div class="profile">
+                    <i class="fas fa-binoculars" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 20px;"></i>
+                    <h3>Product Hunters & Resellers</h3>
+                    <p>Find profitable trends before saturation hits, identify white spaces in the market, and source with confidence.</p>
+                </div>
+                <div class="profile">
+                    <i class="fas fa-trademark" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 20px;"></i>
+                    <h3>Brand Builders</h3>
+                    <p>Validate product-market fit before investing heavily, understand regional preferences, and time launches perfectly.</p>
+                </div>
+                <div class="profile">
+                    <i class="fas fa-chart-line" style="font-size: 2.5rem; color: var(--primary); margin-bottom: 20px;"></i>
+                    <h3>Scaling Sellers</h3>
+                    <p>Expand to the right regions at the right time, avoid saturated markets, and optimize inventory across geographies.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Differentiation -->
+    <section class="differentiation-section">
+        <div class="container">
+            <h2 class="section-title">Why This Is Different</h2>
+            <p class="section-subtitle">A clear, defensible position in the market</p>
+            
+            <div class="comparison">
+                <div class="dont">
+                    <h3 class="dont-title">What Others Do</h3>
+                    <ul style="list-style: none;">
+                        <li style="margin-bottom: 15px; padding-left: 24px; position: relative;">
+                            <i class="fas fa-times" style="color: var(--danger); position: absolute; left: 0;"></i>
+                            Sales-only analytics (looking backward)
+                        </li>
+                        <li style="margin-bottom: 15px; padding-left: 24px; position: relative;">
+                            <i class="fas fa-times" style="color: var(--danger); position: absolute; left: 0;"></i>
+                            Ad-driven trend tools (biased by spend)
+                        </li>
+                        <li style="margin-bottom: 15px; padding-left: 24px; position: relative;">
+                            <i class="fas fa-times" style="color: var(--danger); position: absolute; left: 0;"></i>
+                            Static keyword research (no geo or time intelligence)
+                        </li>
+                    </ul>
+                </div>
+                <div class="do">
+                    <h3 class="do-title">What We Do</h3>
+                    <ul style="list-style: none;">
+                        <li style="margin-bottom: 15px; padding-left: 24px; position: relative;">
+                            <i class="fas fa-check" style="color: var(--success); position: absolute; left: 0;"></i>
+                            Listing-flow intelligence (predictive)
+                        </li>
+                        <li style="margin-bottom: 15px; padding-left: 24px; position: relative;">
+                            <i class="fas fa-check" style="color: var(--success); position: absolute; left: 0;"></i>
+                            Geo-aware trend diffusion
+                        </li>
+                        <li style="margin-bottom: 15px; padding-left: 24px; position: relative;">
+                            <i class="fas fa-check" style="color: var(--success); position: absolute; left: 0;"></i>
+                            Seasonal evolution tracking
+                        </li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Vision -->
+    <section class="vision-section">
+        <div class="container">
+            <h2 class="section-title">From Trends to Foresight</h2>
+            <p class="section-subtitle" style="max-width: 800px;">Where we're taking product intelligence next</p>
+            
+            <div style="max-width: 800px; margin: 40px auto 0; font-size: 1.2rem;">
+                <p>We're building toward a future where product trends are not just tracked but anticipated:</p>
+                
+                <div style="display: grid; grid-template-columns: repeat(2, 1fr); gap: 20px; margin-top: 30px;">
+                    <div style="background-color: rgba(255,255,255,0.8); padding: 20px; border-radius: var(--radius);">
+                        <h3 style="color: var(--primary); margin-bottom: 10px;">Predict Trend Lifespan</h3>
+                        <p>Estimate how long a trend will remain profitable based on diffusion patterns.</p>
+                    </div>
+                    <div style="background-color: rgba(255,255,255,0.8); padding: 20px; border-radius: var(--radius);">
+                        <h3 style="color: var(--primary); margin-bottom: 10px;">Detect Regional Mutations</h3>
+                        <p>Identify how products evolve as they cross cultural and geographic boundaries.</p>
+                    </div>
+                    <div style="background-color: rgba(255,255,255,0.8); padding: 20px; border-radius: var(--radius);">
+                        <h3 style="color: var(--primary); margin-bottom: 10px;">Cross-Season Survivors</h3>
+                        <p>Spot products that break seasonal patterns and maintain demand year-round.</p>
+                    </div>
+                    <div style="background-color: rgba(255,255,255,0.8); padding: 20px; border-radius: var(--radius);">
+                        <h3 style="color: var(--primary); margin-bottom: 10px;">Continuous Intelligence</h3>
+                        <p>A global product intelligence system that improves with every connected store.</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Final CTA -->
+    <section id="final-cta" class="final-cta">
+        <div class="container">
+            <h2>Join the Global Product Intelligence Network</h2>
+            <p>Start seeing tomorrow's trends today. Connect your store and become part of the intelligence network that makes every seller smarter.</p>
+            
+            <div class="cta-buttons">
+                <a href="#" class="btn-primary">Connect Your Store</a>
+                <a href="#dashboard" class="btn-secondary" style="background-color: rgba(255,255,255,0.1); color: white; border-color: white;">Explore Live Trends</a>
+            </div>
+            
+            <p class="trust-note">No competitor exposure. Pattern-based insights only. Your data is anonymized and aggregated.</p>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <div>
+                    <div class="footer-logo">TrendFlow</div>
+                    <p>Global product-trend intelligence powered by real seller data, geo diffusion, and seasonality.</p>
+                </div>
+                <div class="footer-column">
+                    <h3>Product</h3>
+                    <ul>
+                        <li><a href="#how-it-works">How It Works</a></li>
+                        <li><a href="#dashboard">Dashboard</a></li>
+                        <li><a href="#network">Network Effect</a></li>
+                        <li><a href="#">Pricing</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Company</h3>
+                    <ul>
+                        <li><a href="#">About</a></li>
+                        <li><a href="#">Blog</a></li>
+                        <li><a href="#">Careers</a></li>
+                        <li><a href="#">Contact</a></li>
+                    </ul>
+                </div>
+                <div class="footer-column">
+                    <h3>Legal</h3>
+                    <ul>
+                        <li><a href="#">Privacy</a></li>
+                        <li><a href="#">Terms</a></li>
+                        <li><a href="#">Data Policy</a></li>
+                        <li><a href="#">Security</a></li>
+                    </ul>
+                </div>
+            </div>
+            
+            <div class="copyright">
+                &copy; 2023 TrendFlow. All rights reserved. This is an MVP demonstration.
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        // Smooth scrolling for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                
+                const targetId = this.getAttribute('href');
+                if (targetId === '#') return;
+                
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    window.scrollTo({
+                        top: targetElement.offsetTop - 80,
+                        behavior: 'smooth'
+                    });
+                }
+            });
+        });
+        
+        // Simple form submission simulation
+        document.querySelectorAll('.btn-primary').forEach(button => {
+            if (button.getAttribute('href') === '#') {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    alert('Thank you for your interest! In a real implementation, this would connect to your store setup flow.');
+                });
+            }
+        });
+    </script>
+</body>
+</html>
