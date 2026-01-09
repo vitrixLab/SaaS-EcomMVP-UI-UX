@@ -85,6 +85,8 @@ These are suggestions for future development:
 
 ---
 
+![SaaS Ecom MVP Visual Map](https://github.com/vitrixLab/SaaS-EcomMVP-UI-UX/raw/main/SaaS%20Ecom%20MVP%20Visual%20Map.png)
+
 💬 Feedback / Contributing
 
 Contributions, suggestions, and feedback are welcome!
