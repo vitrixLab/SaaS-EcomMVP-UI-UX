@@ -2798,6 +2798,7 @@
         `;
       },
       
+      /*
       renderProductsTable(products) {
         if (products.length === 0) {
           return `
@@ -2860,6 +2861,76 @@
                   </tr>
                 `;
               }).join('')}
+            </tbody>
+          </table>
+        `;
+      },
+      */
+      renderProductsTable(products) {
+        if (products.length === 0) {
+          return `
+            <div class="empty-state">
+              <div class="empty-icon">📦</div>
+              <div class="empty-title">No products found</div>
+              <div class="empty-description">Create your first product to get started</div>
+              <button class="btn btn-primary" id="createFirstProductBtn">
+                Create Product
+              </button>
+            </div>
+          `;
+        }
+      
+        return `
+          <table class="products-table">
+            <thead>
+              <tr>
+                <th>Product</th>
+                <th>Type</th>
+                <th>Created</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              ${products
+                .slice() // prevent mutating original array
+                .sort((a, b) => new Date(b.created_at) - new Date(a.created_at)) // latest → oldest
+                .map(product => {
+                  const metadata = UI.parseJSON(product.metadata || '{}');
+                  const typeClass = `type-${product.type}`;
+                  const typeLabel = product.type.charAt(0).toUpperCase() + product.type.slice(1);
+      
+                  return `
+                    <tr data-id="${product.id}">
+                      <td>
+                        <div style="font-weight: 600; margin-bottom: 2px;">${product.name}</div>
+                        <div style="font-size: var(--text-sm); color: var(--color-text-tertiary);">
+                          ${product.id}
+                        </div>
+                      </td>
+                      <td>
+                        <span class="product-type ${typeClass}">${typeLabel}</span>
+                      </td>
+                      <td>${UI.formatDate(product.created_at)}</td>
+                      <td>
+                        <div class="status-indicator">
+                          <span class="status-dot"></span>
+                          <span>Active</span>
+                        </div>
+                      </td>
+                      <td>
+                        <div class="table-actions">
+                          <button class="btn btn-secondary btn-sm view-product-btn" data-id="${product.id}">
+                            View
+                          </button>
+                          <button class="btn btn-secondary btn-sm delete-product-btn" data-id="${product.id}" style="background: rgba(239, 68, 68, 0.1); color: var(--color-error-500);">
+                            Delete
+                          </button>
+                        </div>
+                      </td>
+                    </tr>
+                  `;
+                }).join('')}
             </tbody>
           </table>
         `;
