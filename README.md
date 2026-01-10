@@ -6,7 +6,7 @@ A lightweight **SaaS-style e-commerce admin dashboard MVP** focusing on core fea
 
 View the MVP in your browser:
 
-👉 https://vitrixlab.github.io/SaaS-EcomMVP-UI-UX/
+👉 [https://vitrixlab.github.io/SaaS-EcomMVP-UI-UX/](https://vitrixlab.github.io/SaaS-EcomMVP-UI-UX/home-v2.html)
 
 ## 📌 Project Overview
 
